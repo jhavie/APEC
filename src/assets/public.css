@@ -1,0 +1,90 @@
+.layout {
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow: auto;
+    height: -webkit-fill-available;
+}
+
+.layout-logo {
+    width: 100px;
+    height: 30px;
+    background: #5b6270;
+    border-radius: 3px;
+    float: left;
+    position: relative;
+    top: 15px;
+    left: 20px;
+}
+
+.layout-nav {
+    width: 200px;
+    /* margin: 0 auto; */
+    margin-right: 40px;
+}
+
+.ivu-menu-vertical .ivu-menu-submenu-title {
+    padding: 14px 10px;
+}
+
+.searchBtn {
+    margin-top: 32px;
+}
+
+.exportBtn {
+    padding-bottom: 15px;
+}
+
+.tablePage {
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.demo-spin-container {
+    display: inline-block;
+    width: 1000px;
+    height: 600px;
+    position: relative;
+    padding: 10px;
+    /* border: 1px solid #eee; */
+}
+
+.tips {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+    padding: 10px;
+    /* border: 1px solid #eee; */
+}
+
+.split {
+    height: 600px;
+    /* overflow: auto; */
+}
+
+.demo-spin-pane {
+    overflow: auto
+}
+
+.header {
+    background-color: #0060a0;
+    height: 120px;
+}
+
+.title {
+    color: white;
+    font-size: 30px;
+    position: relative;
+    left: 30px;
+    top: -25px;
+}
+
+.header_title {
+    padding: 20px
+}
+
+.searchCard {
+    background:#eee;
+    padding: 20px;
+}
