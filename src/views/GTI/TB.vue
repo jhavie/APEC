@@ -67,10 +67,10 @@
           <TabPane label="Table" name="Table">
             <div class="exportBtn">
               <!-- <head>{{this.echartOption.title.text}}-{{this.echartOption.title.subtext}}</head> -->
-              <!-- <Button type="primary" size="mini" @click="exportData" :disabled="btnDisabled">
+              <Button type="primary" @click="exportData" :disabled="btnDisabled">
                 <Icon type="ios-download-outline"></Icon>Export current page source
                 data
-              </Button> -->
+              </Button>
               <!-- <Button
                 type="primary"
                 size="mini"

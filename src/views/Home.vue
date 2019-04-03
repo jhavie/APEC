@@ -28,11 +28,13 @@ import { mapActions, mapState } from "vuex";
 // import { GE, GEBI } from '@/views/GTI'
 import GE from '@/views/GTI/GE.vue'
 import GEBI from '@/views/GTI/GEBI.vue'
-
+import GEOFPBI from '@/views/GTI/GEOFPBI.vue'
+import GEOIPBI from '@/views/GTI/GEOIPBI.vue'
+import TB from '@/views/GTI/TB.vue'
 
 export default {
   name: 'home',
-  components: { Navigation ,LeftMenu ,GE ,GEBI},
+  components: { Navigation ,LeftMenu ,GE,GEBI,GEOFPBI,GEOIPBI,TB},
   data() {
     return {
       // components:'GE',
@@ -41,6 +43,9 @@ export default {
   computed: {
     ...mapState(['pid', 'fid', 'page']),
     getComponent(){
+      if(this.page ===''){
+        return 'GE'
+      }
       return this.page;
       // return 'GE'
     }

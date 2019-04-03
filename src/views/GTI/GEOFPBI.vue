@@ -38,6 +38,24 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
+        <FormItem prop="industry" label="Industries">
+          <Select
+            v-model="formData.industry"
+            placeholder="Select"
+            :transfer="true"
+            style="width:300px"
+            filterable
+            clearable
+            multiple
+          >
+            <Option
+              v-for="item in industryOptions"
+              :value="item.value"
+              :disabled="optionDisabled"
+              :key="item.value"
+            >{{ item.label }}</Option>
+          </Select>
+        </FormItem>
         <FormItem prop="year" label="year">
           <Select
             v-model="formData.year"
@@ -67,10 +85,10 @@
           <TabPane label="Table" name="Table">
             <div class="exportBtn">
               <!-- <head>{{this.echartOption.title.text}}-{{this.echartOption.title.subtext}}</head> -->
-              <!-- <Button type="primary" size="mini" @click="exportData" :disabled="btnDisabled">
+              <Button type="primary" @click="exportData" :disabled="btnDisabled">
                 <Icon type="ios-download-outline"></Icon>Export current page source
                 data
-              </Button> -->
+              </Button>
               <!-- <Button
                 type="primary"
                 size="mini"
@@ -204,37 +222,42 @@ export default {
       tableLoading: false,
       btnLoading: false,
       chartLoading: false,
-      columns: [
-        {
-          type: "index",
+      columns: [{
+          type: 'index',
           width: 60,
-          align: "center"
+          align: 'center'
         },
         {
-          title: "Year",
-          key: "year_type"
+          title: 'Year',
+          key: 'year_type'
         },
         {
-          title: "Exporting Economies",
-          key: "e_country"
+          title: 'Exporting Countries',
+          key: 'e_country'
         },
         {
-          title: "Importing Economies",
-          key: "i_country"
+          title: 'Importing Counties',
+          key: 'i_country'
         },
         {
-          title: "Value(Unit: million US. Dollar)",
-          key: "value",
-          sortable: true
-        }
+          title: 'Industries',
+          key: 'industry'
+        },
+        {
+          title: 'Gross export(Unit: million US. Dollar)',
+          key: 'g_export',
+          sortable: true,
+        },
       ],
       countryOptions: [],
+      industryOptions:[],
       yearOptions: [],
       mergeOption:{},
     };
   },
   mounted() {
     this.countryOptions = util.getCountry();
+    this.industryOptions = util.getIndustry();
     this.yearOptions = util.getYearOptions();
   },
   computed: {

@@ -49,7 +49,7 @@
             multiple
           >
             <Option
-              v-for="item in countryOptions"
+              v-for="item in industryOptions"
               :value="item.value"
               :disabled="optionDisabled"
               :key="item.value"
@@ -85,10 +85,10 @@
           <TabPane label="Table" name="Table">
             <div class="exportBtn">
               <!-- <head>{{this.echartOption.title.text}}-{{this.echartOption.title.subtext}}</head> -->
-              <!-- <Button type="primary" size="mini" @click="exportData" :disabled="btnDisabled">
+              <Button type="primary" @click="exportData" :disabled="btnDisabled">
                 <Icon type="ios-download-outline"></Icon>Export current page source
                 data
-              </Button> -->
+              </Button>
               <!-- <Button
                 type="primary"
                 size="mini"
@@ -250,12 +250,14 @@ export default {
         },
       ],
       countryOptions: [],
+      industryOptions:[],
       yearOptions: [],
       mergeOption:{},
     };
   },
   mounted() {
     this.countryOptions = util.getCountry();
+    this.industryOptions = util.getIndustry();
     this.yearOptions = util.getYearOptions();
   },
   computed: {
