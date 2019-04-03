@@ -133,10 +133,11 @@ export default {
   },
   computed: {
     ...mapState(['pid', 'fid', 'page']),
-},
+  },
   methods: {
     ...mapActions(['changepid','changefid','changepage']),
     change(val){
+      this.changepage(val)
       // console.log(val);
       // console.log(this.pid);
       // console.log(this.fid);

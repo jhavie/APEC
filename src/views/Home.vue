@@ -24,6 +24,7 @@
 // @ is an alias to /src
 import Navigation from '@/framework/Navigation.vue'
 import LeftMenu from '@/framework/LeftMenu.vue'
+import { mapActions, mapState } from "vuex";
 // import { GE, GEBI } from '@/views/GTI'
 import GE from '@/views/GTI/GE.vue'
 import GEBI from '@/views/GTI/GEBI.vue'
@@ -38,8 +39,10 @@ export default {
     }
   },
   computed: {
+    ...mapState(['pid', 'fid', 'page']),
     getComponent(){
-      return 'GE'
+      return this.page;
+      // return 'GE'
     }
   },
   mounted() {

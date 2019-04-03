@@ -1,3 +1,4 @@
+const echartOptions = require('@/data.js')
 const Mock = require('mockjs');
 
 Mock.mock(/getCountry/, function () {
@@ -75,7 +76,7 @@ Mock.mock(/getIndustry/, function () {
     return mockIndustry;
 });
 
-Mock.mock(/fid=0&pid=0/,function(){
+Mock.mock(/getData/,function(){
     let resultData = {
     "code":0,
     "msg":"",
@@ -176,4 +177,21 @@ Mock.mock(/get3Ddata/,function(){
         ["CHL","IDN",4868.01,2005]]
     };
     return chart3DData;
+})
+
+Mock.mock(/getPiedata/,function(){
+    let chart2DData = echartOptions.echartPieOption;
+    return chart2DData;
+})
+Mock.mock(/getBardata/,function(){
+    let chart2DData = echartOptions.echartBarOption;
+    return chart2DData;
+})
+Mock.mock(/getTreedata/,function(){
+    let chart2DData = echartOptions.echartTreeOption;
+    return chart2DData;
+})
+Mock.mock(/getTreeMapdata/,function(){
+    let chart2DData = echartOptions.echartTreeMapOption;
+    return chart2DData;
 })

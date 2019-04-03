@@ -2,7 +2,7 @@
   <div>
     <div style="background:#eee;padding: 20px;">
       <Form ref="formData" :model="formData" inline>
-        <FormItem prop="e_country" label="Exporting Countries">
+        <FormItem prop="e_country" label="Exporting Economies">
           <Select
             v-model="formData.e_country"
             placeholder="Select"
@@ -20,7 +20,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="i_country" label="Importing Countries">
+        <FormItem prop="i_country" label="Importing Economies">
           <Select
             v-model="formData.i_country"
             placeholder="Select"
@@ -49,14 +49,14 @@
             multiple
           >
             <Option
-              v-for="item in industryOptions"
+              v-for="item in countryOptions"
               :value="item.value"
               :disabled="optionDisabled"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="year" label="Year">
+        <FormItem prop="year" label="year">
           <Select
             v-model="formData.year"
             placeholder="Select"
@@ -128,6 +128,15 @@
             </div>
           </TabPane>
           <TabPane label="Chart" name="Chart">
+            <div style="float:right;margin-right:15px">
+              <RadioGroup v-model="echartType" type="button" size="large" @on-change="changeRadio">
+                  <Radio label="Pie"></Radio>
+                  <Radio label="Bar"></Radio>
+                  <Radio label="Tree"></Radio>
+                  <Radio label="TreeMap"></Radio>
+                  <Radio label="3D"></Radio>
+              </RadioGroup>
+            </div>
             <!-- <Button
               style="right: 0;position: absolute;top:50%"
               @click="drawer = !drawer"
@@ -152,7 +161,7 @@
               >
                 <Collapse v-model="collapse" simple>
                   <Panel name="1">
-                    Countries
+                    Economies
                     <p slot="content">
                       <CellGroup>
                         <Cell
@@ -189,6 +198,8 @@
 
 <script>
 import util from "@/util.js";
+import { echart3DOption , echart2DOption } from "@/data.js";
+import { mapActions, mapState } from "vuex";
 export default {
   //Gross Export
   name: "GE",
@@ -199,12 +210,12 @@ export default {
         pid: 0,
         e_country:'',
         i_country:'',
-        industry:'',
-        year: '',
+        year: "",
         page: 1
       },
       tableData: [],
       total: 0,
+      echartType:'',
       tabValue: "Table",
       optionDisabled: false,
       btnDisabled: true,
@@ -239,16 +250,19 @@ export default {
         },
       ],
       countryOptions: [],
-      industryOptions: [],
-      yearOptions: []
+      yearOptions: [],
+      mergeOption:{},
     };
   },
   mounted() {
     this.countryOptions = util.getCountry();
-    this.industryOptions = util.getIndustry();
     this.yearOptions = util.getYearOptions();
   },
+  computed: {
+    ...mapState(['pid', 'fid', 'page']),
+  },
   methods: {
+    ...mapActions(['changepid','changefid','changepage']),
     // optionsChange(val) {
     //   this.optionDisabled = val.length > 4;
     // },
@@ -259,7 +273,7 @@ export default {
       let that = this;
       this.$ajax({
           method: 'POST',
-          url: global.DEV_HOST,
+          url: global.DEV_HOST + '/getData',
           headers: {
               "Content-Type": "application/x-www-form-urlencoded"
           },
@@ -273,9 +287,82 @@ export default {
           console.log(error);
       });
     },
-    exportData() {
-      util.exportData(this.$refs.tableData,'test');
-    }
+    get3Ddata() {
+        let data = this.formData
+        let that = this
+        this.$ajax({
+            method: 'POST',
+            url: global.DEV_HOST + '/get3Ddata',
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            params: data
+          }).then(function (response) {
+            let rp_data = response.data
+            rp_data.data.unshift(rp_data.correspond_arr)
+            that.mergeOption = {
+              xAxis3D :{
+                data:rp_data.xAxis,
+                name:rp_data.correspond_arr[0],
+              },
+              yAxis3D :{
+                data:rp_data.yAxis,
+                name:rp_data.correspond_arr[1],
+              },
+              dataset:{
+                source:rp_data.data
+              },
+              visualMap :{
+                max:rp_data.max,
+                min:rp_data.min
+              }
+            }
+            that.init3DChart();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      get2Ddata(type) {
+        let data = this.formData
+        let that = this
+        this.$ajax({
+            method: 'POST',
+            url: global.DEV_HOST + '/get'+ type + 'data',
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            params: data
+          }).then(function (response) {
+            // console.log(response);
+            // let rp_data = response.data
+            // rp_data.data.unshift(rp_data.correspond_arr)
+            that.init2DChart(response.data)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      init3DChart(){
+          let myChart = this.$echarts.init( this.$refs['echart'] );
+          let newOptions = this.$obj.merge(echart3DOption,this.mergeOption);
+          myChart.setOption(newOptions,true);
+      },
+      init2DChart(option){
+        let myChart = this.$echarts.init( this.$refs['echart'] );
+        // let newOptions = this.$obj.merge(echart2DOption,{});
+        myChart.setOption(option,true);
+      },
+      exportData() {
+        util.exportData(this.$refs.tableData,'test');
+      },
+      changeRadio(val) {
+        if(val==='3D'){
+          this.get3Ddata();
+        }else{
+          this.get2Ddata(val);
+        }
+      }
   }
 };
 </script>

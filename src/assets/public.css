@@ -20,7 +20,7 @@
 
 .layout-nav {
     width: 200px;
-    /* margin: 0 auto; */
+    margin: 0 auto;
     margin-right: 40px;
 }
 
@@ -43,7 +43,7 @@
 
 .demo-spin-container {
     display: inline-block;
-    width: 1000px;
+    width: 1200px;
     height: 600px;
     position: relative;
     padding: 10px;
