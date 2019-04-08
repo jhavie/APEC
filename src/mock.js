@@ -180,7 +180,9 @@ Mock.mock(/get3Ddata/,function(){
 })
 
 Mock.mock(/getPiedata/,function(){
-    let chart2DData = echartOptions.echartPieOption;
+    let chart2DData = echartOptions.generatePieData();
+    console.log(chart2DData);
+    // let chart2DData = echartOptions.echartPieOption;
     return chart2DData;
 })
 Mock.mock(/getBardata/,function(){
@@ -195,3 +197,4 @@ Mock.mock(/getTreeMapdata/,function(){
     let chart2DData = echartOptions.echartTreeMapOption;
     return chart2DData;
 })
+
