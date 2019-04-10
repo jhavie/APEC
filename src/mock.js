@@ -153,40 +153,42 @@ Mock.mock(/get3Ddata/,function(){
     "code":0,
     "msg":"",
     "t_name":"gt_gbe",
-    "max":18583,
-    "min":1,
+    "max":20000,
+    "min":0,
     "xAxis":["AUS","BRN","CAN","CHL"],
     "yAxis":["CHN","EU28","HKG","IDN"],
     "correspond_arr":["EXP","IMP","Value","Year"],
     "data":[
-        ["AUS","CHN",2341.6,2005],
-        ["BRN","CHN",3.22,2005],
-        ["CAN","CHN",10048.11,2005],
-        ["CHL","CHN",12347.75,2005],
-        ["AUS","EU28",6050.7,2005],
-        ["BRN","EU28",1.3,2005],
-        ["CAN","EU28",18582.5,2005],
-        ["CHL","EU28",1190.89,2005],
-        ["AUS","HKG",186.17,2005],
-        ["BRN","HKG",109.15,2005],
-        ["CAN","HKG",3791.75,2005],
-        ["CHL","HKG",147.92,2005],
-        ["AUS","IDN",582.7,2005],
-        ["BRN","IDN",18.47,2005],
-        ["CAN","IDN",519.56,2005],
-        ["CHL","IDN",4868.01,2005]]
+        // ["AUS","CHN",2341.6,2005],
+        // ["BRN","CHN",3.22,2005],
+        // ["CAN","CHN",10048.11,2005],
+        // ["CHL","CHN",12347.75,2005],
+        // ["AUS","EU28",6050.7,2005],
+        // ["BRN","EU28",1.3,2005],
+        // ["CAN","EU28",18582.5,2005],
+        // ["CHL","EU28",1190.89,2005],
+        // ["AUS","HKG",186.17,2005],
+        // ["BRN","HKG",109.15,2005],
+        // ["CAN","HKG",3791.75,2005],
+        // ["CHL","HKG",147.92,2005],
+        // ["AUS","IDN",582.7,2005],
+        // ["BRN","IDN",18.47,2005],
+        // ["CAN","IDN",519.56,2005],
+        // ["CHL","IDN",4868.01,2005]
+        ]
     };
+    let data = echartOptions.generate3DData();
+    chart3DData.data = data;
     return chart3DData;
 })
 
 Mock.mock(/getPiedata/,function(){
     let chart2DData = echartOptions.generatePieData();
-    console.log(chart2DData);
     // let chart2DData = echartOptions.echartPieOption;
     return chart2DData;
 })
 Mock.mock(/getBardata/,function(){
-    let chart2DData = echartOptions.echartBarOption;
+    let chart2DData = echartOptions.generateBarData();
     return chart2DData;
 })
 Mock.mock(/getTreedata/,function(){

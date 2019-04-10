@@ -2,7 +2,7 @@
   <div>
     <div style="background:#eee;padding: 20px;">
       <Form ref="formData" :model="formData" inline>
-        <FormItem prop="e_country" label="Exporting Economies">
+        <FormItem prop="e_country" label="APEC Economy">
           <Select
             v-model="formData.e_country"
             placeholder="Select"
@@ -20,7 +20,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="i_country" label="Importing Economies">
+        <FormItem prop="i_country" label="Trading Partner">
           <Select
             v-model="formData.i_country"
             placeholder="Select"
@@ -38,7 +38,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="year" label="year">
+        <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
             placeholder="Select"
@@ -214,11 +214,11 @@ export default {
           key: "year_type"
         },
         {
-          title: "Exporting Economies",
+          title: "APEC Economy",
           key: "e_country"
         },
         {
-          title: "Importing Economies",
+          title: "Trading Partner",
           key: "i_country"
         },
         {

@@ -26,8 +26,8 @@ export let echart3DOption = {
     },
     visualMap: {
         type: 'piecewise',
-        max: 20,
-        min: 10,
+        max: 20000,
+        min: 0,
         dimension: 2,
         inRange: {
             color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
@@ -115,6 +115,22 @@ export let echart3DOption = {
     }]
 };
 
+export function generate3DData(){
+    let economiesArr = ['AUS','BRN','CAN','CHL'];
+    let economiesArr2 = ['CHN','EU28','HKG','IDN'];
+    let data = [];
+    economiesArr.forEach((item)=>{
+         economiesArr2.forEach((item2)=>{
+             data.push(
+                 Mock.mock(
+                    [item,item2,'@float(0,20000,2,2)','@float(0,20000,2,2)']
+                )
+             )
+         })
+    })
+    return data;
+    
+};
 export let echartPieOption = {
     legend: {
         type:'scroll',
@@ -243,27 +259,28 @@ export function generatePieData (){
     pieData.push(hearArr);
     economiesArr.forEach((item)=>{
         pieData.push(Mock.mock(
-            [item,'@float(0,20000)']
+            [item,'@float(0,20000,2,2)']
         ))
     })
     this.echartPieOption.dataset.source = pieData;
-    return this.echartPieOption
-}
+    return this.echartPieOption;
+};
 
 export let echartBarOption = {
     title: {
         text: 'Gross Trade Indicators',
         subtext: 'Gross Export'
     },
+    legend: {},
     tooltip: {
         trigger: 'axis',
     },
     toolbox: {
         feature: {
-            // magicType: {
-            //     show: true,
-            //     type: ['line', 'bar']
-            // },
+            magicType: {
+                show: true,
+                type: ['line', 'bar']
+            },
             restore: {
                 show: true
             },
@@ -284,70 +301,64 @@ export let echartBarOption = {
         top: '10%',
         containLabel: true
     },
-    visualMap: {
-        show:false,
-        type: 'piecewise',
-        max: 132323,
-        min: 0,
-        dimension: 1,
-        seriesIndex:0,
-        inRange: {
-            color: ['#455a64', '#616161', '#5d4037', '#ff6e40', '#ffab40', '#ffd740', '#ffff00', '#eeff41', '#b2ff59', '#69f0ae', '#64ffda', '#18ffff', '#40c4ff', '#448aff', '#536dfe', '#7c4dff', '#e040fb', '#ff4081', '#ff5252']
-        }
-    },
+    // visualMap: {
+    //     show:false,
+    //     type: 'piecewise',
+    //     max: 132323,
+    //     min: 0,
+    //     dimension: 2,
+    //     // seriesIndex:0,
+    //     inRange: {
+    //         color: ['#455a64', '#616161', '#5d4037', '#ff6e40', '#ffab40', '#ffd740', '#ffff00', '#eeff41', '#b2ff59', '#69f0ae', '#64ffda', '#18ffff', '#40c4ff', '#448aff', '#536dfe', '#7c4dff', '#e040fb', '#ff4081', '#ff5252']
+    //     }
+    // },
     dataset: {
+        dimensions: ['EXP,IMP', '2005','2012'],
         source: [
-            ['EXP,IMP', 'Value'],
-            // ["AUS,AUS", 0],
-            ["BRN,AUS", 38.42],
-            ["CAN,AUS", 7700.92],
-            ["CHN,AUS", 2098.58],
-            ["EU28,AUS", 25129.1],
-            ["AUS,BRN", 40.39],
-            ["BRN,BRN", 0],
-            ["CAN,BRN", 46.47],
-            ["CHN,BRN", 188.66],
-            ["EU28,BRN", 133.82],
-            ["AUS,CAN", 565.43],
-            ["BRN,CAN", 0.85],
-            ["CAN,CAN", 0],
-            ["CHN,CAN", 31702.83],
-            ["EU28,CAN", 28180.54],
-            ["AUS,CHL", 120.7],
-            ["BRN,CHL", 0.2],
-            ["CAN,CHL", 257.35],
-            ["CHN,CHL", 4141.18],
-            ["EU28,CHL", 7132.5],
-            ["AUS,EU28", 6050.7],
-            ["BRN,EU28", 1.3],
-            ["CAN,EU28", 18582.5],
-            ["CHN,EU28", 132322.72],
-            ["EU28,EU28", 0]
+            // ['EXP,IMP', '2005','2012'],
+            ["BRN,AUS", 38.42, 1112.12],
+            ["CAN,AUS", 7700.92, 1412.12],
+            ["CHN,AUS", 2098.58, 112.12],
+            ["EU28,AUS", 25129.1, 912.12],
+            ["AUS,BRN", 40.39, 1122.12],
+            ["CAN,BRN", 46.47, 1112.12],
+            ["CHN,BRN", 188.66, 1192.12],
+            ["EU28,BRN", 133.82, 9112.12],
+            ["AUS,CAN", 565.43, 11112.12],
+            ["BRN,CAN", 0.85, 11211.12],
+            ["CHN,CAN", 31702.83, 13312.12],
+            ["EU28,CAN", 28180.54, 1312.12],
+            ["AUS,CHL", 120.7, 1124.12],
+            ["BRN,CHL", 0.2, 11255.12],
+            ["CAN,CHL", 257.35, 11432.12],
+            ["EU28,CHL", 7132.5, 1132.12],
+            ["AUS,EU28", 3021.7, 113112.12],
+            ["BRN,EU28", 1.3, 111112.112],
+            ["CAN,EU28", 18582.5, 11112.12],
+            ["CHN,EU28", 132322.72, 1112.12],
         ]
     },
-    xAxis: [{
+    xAxis: {
         type: 'category',
-    }],
-    yAxis: [{
-        type: 'value',
-    }],
+    },
+    yAxis: {},
     series: [
         {
             type: 'bar',
+            barCateGoryGap:80,
             itemStyle: {
                 normal: {
-                    color: '#c23531',
+                    // color: '#c23531',
                     shadowBlur: 200,
                     shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
             },
         },
         {
-            type: 'line',
-            // areaStyle: {},
+            type: 'bar',
             itemStyle: {
                 normal: {
-                    color: '#c23531',
+                    // color: '#c34531',
                     shadowBlur: 200,
                     shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
@@ -356,6 +367,19 @@ export let echartBarOption = {
     ]
 };
 
+export function generateBarData(){
+    let barData = [];
+    let economiesArr = ["BRN,AUS", "CAN,AUS", "CHN,AUS", "EU28,AUS", "AUS,BRN", "CAN,BRN", "CHN,BRN", "EU28,BRN", "AUS,CAN", "BRN,CAN", "CHN,CAN", "EU28,CAN", "AUS,CHL", "BRN,CHL", "CAN,CHL", "EU28,CHL", "AUS,EU28", "BRN,EU28", "CAN,EU28", "CHN,EU28"];
+    economiesArr.map((item)=>{
+        barData.push(
+            Mock.mock(
+                [item,'@float(0,20000,2,2)','@float(0,20000,2,2)']
+            )
+        )
+    })
+    this.echartBarOption.dataset.source = barData;
+    return this.echartBarOption;
+}
 export let echartTreeOption = {
     tooltip: {
         trigger: 'item',
