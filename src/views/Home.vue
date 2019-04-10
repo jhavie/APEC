@@ -12,7 +12,7 @@
           </div>
           <Content>
             <!-- <router-link tag="li" to="/foo"/> -->
-            <component :is="getComponent"></component>
+            <component :is="component"></component>
           </Content>
         </Layout>
       </Layout>
@@ -26,17 +26,20 @@ import Navigation from '@/framework/Navigation.vue'
 import LeftMenu from '@/framework/LeftMenu.vue'
 import { mapActions, mapState } from "vuex";
 // import { GE, GEBI } from '@/views/GTI'
-import GE from '@/views/GTI/GE.vue'
-import GEBI from '@/views/GTI/GEBI.vue'
-import GEOFPBI from '@/views/GTI/GEOFPBI.vue'
-import GEOIPBI from '@/views/GTI/GEOIPBI.vue'
-import TB from '@/views/GTI/TB.vue'
+// import GE from '@/views/GTI/GE.vue'
+// import GEBI from '@/views/GTI/GEBI.vue'
+// import GEOFPBI from '@/views/GTI/GEOFPBI.vue'
+// import GEOIPBI from '@/views/GTI/GEOIPBI.vue'
+// import TB from '@/views/GTI/TB.vue'
 
 export default {
   name: 'home',
-  components: { Navigation ,LeftMenu ,GE,GEBI,GEOFPBI,GEOIPBI,TB},
+  components: { Navigation ,LeftMenu},
   data() {
     return {
+      component: null,
+
+      // component
       // components:'GE',
     }
   },
@@ -50,12 +53,16 @@ export default {
       // return 'GE'
     }
   },
+
+  watch: {
+    getComponent: {
+      handler: function(val, oldVal) {
+        this.component = () => import(`./GTI/${val}`)
+      },
+      immediate: true
+    }
+  },
   mounted() {
-    // let item = localStorage.getItem('item');
-    // console.log(item);
-    // let i = () => import(`@/views/GTI/GEBI.vue`)
-    // console.log(i);
-    // this.component = () => import(`@/views/GEBI/${val}`) 
   },
 }
 </script>

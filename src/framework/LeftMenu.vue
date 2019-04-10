@@ -48,57 +48,75 @@ export default {
     return {
       GTI: [
         {
-          label: "Gross Exports (EXGR, $)",
+          // Gross exports
+          label: "Gross Exports",
           alias: "GE",
           name: "0-0"
         },
         {
-          label: "Gross Imports (IMGR, $)",
+          // Gross imports
+          label: "Gross Imports",
           alias: "GI",
           name: "0-1"
         },
         {
-          label: "Trade Balance, Gross (BALGR, $)",
+          // Bilateral trade balance, gross
+          label: "Bilateral trade balance, gross",
           alias: "TBG",
           name: "0-2"
         }
       ],
       VATI: [
+        // a.Value added exports ($): by APEC economy, trading partner, industry, year 
+        // b.Domestic content in intermediate exports that eventually return home ($): by APEC economy, industry, year
+        // c.Foreign value added content in gross exports ($): by APEC economy, industry, year
+        // d.Value added exports as a share of gross exports (%): by APEC economy, industry, year
+        // e.Domestic content in intermediate exports that eventually return home as a share of gross exports (%): by APEC economy, industry, year
+        // f.Foreign value added as a share of gross exports (%): by APEC economy, industry, year
+        // g.Bilateral trade balance, value added ($): by APEC economy, trading partner, year
+        // h.Indicator selection choices:
         {
-          label: "Value Added Exports (VT, $)",
+          // Value added exports
+          label: "Value Added Exports",
           alias: "VAE",
           name: "1-0"
         },
         {
-          label: "Domestic Content Returning Home (EXGR_VS1, $)",
+          //Domestic content in intermediate exports that eventually return home
+          label: "Domestic Content in Intermediate exports that eventually return home",
           alias: "DCRH",
           name: "1-1"
         },
         {
+          //Domestic content in intermediate exports that eventually return home
           // Domestic content in gross exports (EXGR_DC, $)
-          label: "Domestic Content In Gross Exports (EXGR_DC, $)",
-          alias: "DCIGE",
+          label: "Domestic Content in Intermediate Exports that Eventually Return Home",
+          alias: "DCIEERH",
           name: "1-2"
         },
         {
+          //Foreign value added content in gross exports
           // Domestic content as a share of gross exports (EXGR_DCSH, %)
-          label: "Domestic Content As a Share of Gross Exports (EXGR_DCSH, %)",
-          alias: "DCASGE",
+          label: "Foreign Value Added Content in Gross Exports",
+          alias: "FVACGE",
           name: "1-3"
         },
         {
+          //Value added exports as a share of gross exports
           //Domestic content returning home as a share of gross exports (EXGR_VS1SH, %)
-          label: "Domestic Content Returning Home As a Share of Gross Exports (EXGR_VS1SH, %)",
-          alias: "DCRHASGE",
+          label: "Value Added Exports as a Share of Gross Exports",
+          alias: "VAESGE",
           name: "1-4"
         },
         {
+          //Domestic content in intermediate exports that eventually return home as a share of gross exports
           //Foreign content as a share of gross exports (EXGR_VSSH, %)
-          label: "Foreign Content As a Share of Gross Exports (EXGR_VSSH, %)",
-          alias: "FCASGE",
+          label: "Domestic Content in Intermediate Exports that Eventually Return Home as a Share of Gross Exports",
+          alias: "DCIEERHSGE",
           name: "1-5"
         },
         {
+          // Foreign value added as a share of gross exports
           //Trade balance, value added (BALVA, $)
           label: "Trade Balance, Value Added (BALVA, $)",
           alias: "BTBVA",
