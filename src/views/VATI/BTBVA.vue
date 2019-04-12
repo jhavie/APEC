@@ -2,7 +2,7 @@
   <div>
     <div style="background:#eee;padding: 20px;">
       <Form ref="formData" :model="formData" inline>
-        <FormItem prop="e_country" label="Exporting Economies">
+        <FormItem prop="e_country" label="APEC Economy">
           <Select
             v-model="formData.e_country"
             placeholder="Select"
@@ -20,7 +20,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="i_country" label="Importing Economies">
+        <!-- <FormItem prop="i_country" label="Trading Partner">
           <Select
             v-model="formData.i_country"
             placeholder="Select"
@@ -37,8 +37,26 @@
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
+        </FormItem> -->
+        <FormItem prop="industry" label="Industry">
+          <Select
+            v-model="formData.industry"
+            placeholder="Select"
+            :transfer="true"
+            style="width:300px"
+            filterable
+            clearable
+            multiple
+          >
+            <Option
+              v-for="item in industryOptions"
+              :value="item.value"
+              :disabled="optionDisabled"
+              :key="item.value"
+            >{{ item.label }}</Option>
+          </Select>
         </FormItem>
-        <FormItem prop="year" label="year">
+        <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
             placeholder="Select"
@@ -191,7 +209,7 @@ export default {
         fid: 0,
         pid: 0,
         e_country:'',
-        i_country:'',
+        // i_country:'',
         year: "",
         page: 1
       },
@@ -215,12 +233,8 @@ export default {
           key: "year_type"
         },
         {
-          title: "Exporting Economies",
+          title: "APEC Economy",
           key: "e_country"
-        },
-        {
-          title: "Importing Economies",
-          key: "i_country"
         },
         {
           title: "Value(Unit: million US. Dollar)",
@@ -229,12 +243,14 @@ export default {
         }
       ],
       countryOptions: [],
+      industryOptions:[],
       yearOptions: [],
       mergeOption:{},
     };
   },
   mounted() {
     this.countryOptions = util.getCountry();
+    this.industryOptions = util.getIndustry();
     this.yearOptions = util.getYearOptions();
   },
   computed: {

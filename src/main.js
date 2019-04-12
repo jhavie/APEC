@@ -6,7 +6,7 @@ import iView from 'iview';
 import axios from 'axios';
 import 'iview/dist/styles/iview.css';
 import './assets/public.css'
-import './mock.js'
+// import './mock.js'
 import '@/common/config'
 import echarts from 'echarts'
 import 'echarts-gl'

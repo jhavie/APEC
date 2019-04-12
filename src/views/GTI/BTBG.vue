@@ -38,7 +38,6 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-
         <FormItem prop="industry" label="Industry">
           <Select
             v-model="formData.industry"
@@ -49,22 +48,12 @@
             clearable
             multiple
           >
-            <OptionGroup label="Agriculture, hunting, forestry and fishing">
-              <Option
-                v-for="item in industryOptions[0]"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </OptionGroup>
-            <OptionGroup label="Mining and quarrying">
-              <Option
-                v-for="item in industryOptions[1]"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </OptionGroup>
+            <Option
+              v-for="item in industryOptions"
+              :value="item.value"
+              :disabled="optionDisabled"
+              :key="item.value"
+            >{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem prop="year" label="Year">
@@ -141,11 +130,11 @@
           <TabPane label="Chart" name="Chart">
             <div style="float:right;margin-right:15px">
               <RadioGroup v-model="echartType" type="button" size="large" @on-change="changeRadio">
-                <Radio label="Pie"></Radio>
-                <Radio label="Bar"></Radio>
-                <Radio label="Tree"></Radio>
-                <Radio label="TreeMap"></Radio>
-                <Radio label="3D"></Radio>
+                  <Radio label="Pie"></Radio>
+                  <Radio label="Bar"></Radio>
+                  <Radio label="Tree"></Radio>
+                  <Radio label="TreeMap"></Radio>
+                  <Radio label="3D"></Radio>
               </RadioGroup>
             </div>
             <!-- <Button
@@ -209,7 +198,7 @@
 
 <script>
 import util from "@/util.js";
-import { echart3DOption, echart2DOption } from "@/data.js";
+import { echart3DOption , echart2DOption } from "@/data.js";
 import { mapActions, mapState } from "vuex";
 export default {
   //Gross Export
@@ -219,14 +208,14 @@ export default {
       formData: {
         fid: 0,
         pid: 0,
-        e_country: "",
-        i_country: "",
+        e_country:'',
+        i_country:'',
         year: "",
         page: 1
       },
       tableData: [],
       total: 0,
-      echartType: "",
+      echartType:'',
       tabValue: "Table",
       optionDisabled: false,
       btnDisabled: true,
@@ -258,132 +247,121 @@ export default {
         }
       ],
       countryOptions: [],
-      industryOptions: [],
+      industryOptions:[],
       yearOptions: [],
-      mergeOption: {}
+      mergeOption:{},
     };
   },
   mounted() {
     this.countryOptions = util.getCountry();
-    // this.industryOptions = util.getIndustry();
-    this.industryOptions = [
-      [{
-        label:'Agriculture, hunting, forestry and fishing',
-        value:1
-      }],[{
-        label:'Mining and quarrying',
-        value:2
-      }]]
+    this.industryOptions = util.getIndustry();
     this.yearOptions = util.getYearOptions();
   },
   computed: {
-    ...mapState(["pid", "fid", "page"])
+    ...mapState(['pid', 'fid', 'page']),
   },
   methods: {
-    ...mapActions(["changepid", "changefid", "changepage"]),
+    ...mapActions(['changepid','changefid','changepage']),
     // optionsChange(val) {
     //   this.optionDisabled = val.length > 4;
     // },
     pageChanged() {
       this.handleSubmit();
     },
-    handleSubmit() {
+    handleSubmit(){
       let that = this;
       this.$ajax({
-        method: "POST",
-        url: global.DEV_HOST + "/getData",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        params: this.formData
-      })
-        .then(function(response) {
+          method: 'POST',
+          url: global.DEV_HOST + '/getData',
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          params: this.formData
+      }).then(function (response) {
           let rp_data = response.data.data;
           that.tableData = rp_data.data;
           that.total = rp_data.total;
-        })
-        .catch(function(error) {
+      })
+      .catch(function (error) {
           console.log(error);
-        });
+      });
     },
     get3Ddata() {
-      let data = this.formData;
-      let that = this;
-      this.$ajax({
-        method: "POST",
-        url: global.DEV_HOST + "/get3Ddata",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        params: data
-      })
-        .then(function(response) {
-          let rp_data = response.data;
-          rp_data.data.unshift(rp_data.correspond_arr);
-          that.mergeOption = {
-            xAxis3D: {
-              data: rp_data.xAxis,
-              name: rp_data.correspond_arr[0]
+        let data = this.formData
+        let that = this
+        this.$ajax({
+            method: 'POST',
+            url: global.DEV_HOST + '/get3Ddata',
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
             },
-            yAxis3D: {
-              data: rp_data.yAxis,
-              name: rp_data.correspond_arr[1]
-            },
-            dataset: {
-              source: rp_data.data
-            },
-            visualMap: {
-              max: rp_data.max,
-              min: rp_data.min
+            params: data
+          }).then(function (response) {
+            let rp_data = response.data
+            rp_data.data.unshift(rp_data.correspond_arr)
+            that.mergeOption = {
+              xAxis3D :{
+                data:rp_data.xAxis,
+                name:rp_data.correspond_arr[0],
+              },
+              yAxis3D :{
+                data:rp_data.yAxis,
+                name:rp_data.correspond_arr[1],
+              },
+              dataset:{
+                source:rp_data.data
+              },
+              visualMap :{
+                max:rp_data.max,
+                min:rp_data.min
+              }
             }
-          };
-          that.init3DChart();
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-    get2Ddata(type) {
-      let data = this.formData;
-      let that = this;
-      this.$ajax({
-        method: "POST",
-        url: global.DEV_HOST + "/get" + type + "data",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        params: data
-      })
-        .then(function(response) {
-          // console.log(response);
-          // let rp_data = response.data
-          // rp_data.data.unshift(rp_data.correspond_arr)
-          that.init2DChart(response.data);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-    init3DChart() {
-      let myChart = this.$echarts.init(this.$refs["echart"]);
-      let newOptions = this.$obj.merge(echart3DOption, this.mergeOption);
-      myChart.setOption(newOptions, true);
-    },
-    init2DChart(option) {
-      let myChart = this.$echarts.init(this.$refs["echart"]);
-      // let newOptions = this.$obj.merge(echart2DOption,{});
-      myChart.setOption(option, true);
-    },
-    exportData() {
-      util.exportData(this.$refs.tableData, "test");
-    },
-    changeRadio(val) {
-      if (val === "3D") {
-        this.get3Ddata();
-      } else {
-        this.get2Ddata(val);
+            that.init3DChart();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      get2Ddata(type) {
+        let data = this.formData
+        let that = this
+        this.$ajax({
+            method: 'POST',
+            url: global.DEV_HOST + '/get'+ type + 'data',
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            params: data
+          }).then(function (response) {
+            // console.log(response);
+            // let rp_data = response.data
+            // rp_data.data.unshift(rp_data.correspond_arr)
+            that.init2DChart(response.data)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      init3DChart(){
+          let myChart = this.$echarts.init( this.$refs['echart'] );
+          let newOptions = this.$obj.merge(echart3DOption,this.mergeOption);
+          myChart.setOption(newOptions,true);
+      },
+      init2DChart(option){
+        let myChart = this.$echarts.init( this.$refs['echart'] );
+        // let newOptions = this.$obj.merge(echart2DOption,{});
+        myChart.setOption(option,true);
+      },
+      exportData() {
+        util.exportData(this.$refs.tableData,'test');
+      },
+      changeRadio(val) {
+        if(val==='3D'){
+          this.get3Ddata();
+        }else{
+          this.get2Ddata(val);
+        }
       }
-    }
   }
 };
 </script>

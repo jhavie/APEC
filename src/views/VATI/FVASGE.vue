@@ -2,7 +2,7 @@
   <div>
     <div style="background:#eee;padding: 20px;">
       <Form ref="formData" :model="formData" inline>
-        <FormItem prop="e_country" label="Exporting Economies">
+        <FormItem prop="e_country" label="APEC Economy">
           <Select
             v-model="formData.e_country"
             placeholder="Select"
@@ -20,7 +20,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="i_country" label="Importing Economies">
+        <!-- <FormItem prop="i_country" label="Trading Partner">
           <Select
             v-model="formData.i_country"
             placeholder="Select"
@@ -37,8 +37,8 @@
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
-        </FormItem>
-        <FormItem prop="industry" label="Industries">
+        </FormItem> -->
+        <FormItem prop="industry" label="Industry">
           <Select
             v-model="formData.industry"
             placeholder="Select"
@@ -56,7 +56,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="year" label="year">
+        <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
             placeholder="Select"
@@ -209,7 +209,7 @@ export default {
         fid: 0,
         pid: 0,
         e_country:'',
-        i_country:'',
+        // i_country:'',
         year: "",
         page: 1
       },
@@ -222,32 +222,25 @@ export default {
       tableLoading: false,
       btnLoading: false,
       chartLoading: false,
-      columns: [{
-          type: 'index',
+      columns: [
+        {
+          type: "index",
           width: 60,
-          align: 'center'
+          align: "center"
         },
         {
-          title: 'Year',
-          key: 'year_type'
+          title: "Year",
+          key: "year_type"
         },
         {
-          title: 'Exporting Countries',
-          key: 'e_country'
+          title: "APEC Economy",
+          key: "e_country"
         },
         {
-          title: 'Importing Counties',
-          key: 'i_country'
-        },
-        {
-          title: 'Industries',
-          key: 'industry'
-        },
-        {
-          title: 'Gross export(Unit: million US. Dollar)',
-          key: 'g_export',
-          sortable: true,
-        },
+          title: "Value(Unit: million US. Dollar)",
+          key: "value",
+          sortable: true
+        }
       ],
       countryOptions: [],
       industryOptions:[],
@@ -352,7 +345,7 @@ export default {
       },
       init2DChart(option){
         let myChart = this.$echarts.init( this.$refs['echart'] );
-        // let newOptions = this.$obj.merge(echart2DOption,{});
+        // let newOptions = tlefthis.$obj.merge(echart2DOption,{});
         myChart.setOption(option,true);
       },
       exportData() {

@@ -49,21 +49,47 @@ export default {
       GTI: [
         {
           // Gross exports
-          label: "Gross Exports",
-          alias: "GE",
+          label: "Gross Exports (EXGR, $)",
+          alias: "GTI_GE",
           name: "0-0"
         },
         {
           // Gross imports
-          label: "Gross Imports",
-          alias: "GI",
+          // Gross exports, intermediate (EXGR_INT, $)
+          label: "Gross exports, intermediate (EXGR_INT, $)",
+          alias: "GTI_GI",
           name: "0-1"
         },
         {
           // Bilateral trade balance, gross
-          label: "Bilateral trade balance, gross",
-          alias: "TBG",
+          // Gross exports, final (EXGR_FIN, $)
+          label: "Gross exports, final (EXGR_FIN, $)",
+          alias: "GTI_BTBG",
           name: "0-2"
+        },
+        {
+          // Gross imports (IMGR, $)
+          label: "Gross imports (IMGR, $)",
+          alias: "GTI_BTBG",
+          name: "0-3"
+        },
+        {
+          // Gross imports, intermediate (IMGR_INT, $)
+          label: "Gross imports, intermediate (IMGR_INT, $)",
+          alias: "GTI_BTBG",
+          name: "0-4"
+        },
+        {
+          // Gross imports, final (IMGR_FIN, $)
+          label: "Gross imports, final (IMGR_FIN, $)",
+          alias: "GTI_BTBG",
+          name: "0-5"
+        },
+        {
+          // Trade balance, gross (BALGR, $)
+          label: "Trade balance, gross (BALGR, $)",
+          alias: "GTI_BTBG",
+          name: "0-5"
         }
       ],
       VATI: [
@@ -78,48 +104,55 @@ export default {
         {
           // Value added exports
           label: "Value Added Exports",
-          alias: "VAE",
+          alias: "VATI_VAE",
           name: "1-0"
         },
         {
           //Domestic content in intermediate exports that eventually return home
           label: "Domestic Content in Intermediate exports that eventually return home",
-          alias: "DCRH",
+          alias: "VATI_DCRH",
           name: "1-1"
         },
         {
           //Domestic content in intermediate exports that eventually return home
           // Domestic content in gross exports (EXGR_DC, $)
           label: "Domestic Content in Intermediate Exports that Eventually Return Home",
-          alias: "DCIEERH",
+          alias: "VATI_DCIEERH",
           name: "1-2"
         },
         {
           //Foreign value added content in gross exports
           // Domestic content as a share of gross exports (EXGR_DCSH, %)
           label: "Foreign Value Added Content in Gross Exports",
-          alias: "FVACGE",
+          alias: "VATI_FVACGE",
           name: "1-3"
         },
         {
           //Value added exports as a share of gross exports
           //Domestic content returning home as a share of gross exports (EXGR_VS1SH, %)
           label: "Value Added Exports as a Share of Gross Exports",
-          alias: "VAESGE",
+          alias: "VATI_VAESGE",
           name: "1-4"
         },
         {
           //Domestic content in intermediate exports that eventually return home as a share of gross exports
           //Foreign content as a share of gross exports (EXGR_VSSH, %)
           label: "Domestic Content in Intermediate Exports that Eventually Return Home as a Share of Gross Exports",
-          alias: "DCIEERHSGE",
+          alias: "VATI_DCIEERHSGE",
           name: "1-5"
         },
         {
           // Foreign value added as a share of gross exports
           //Trade balance, value added (BALVA, $)
-          label: "Trade Balance, Value Added (BALVA, $)",
-          alias: "BTBVA",
+          label: "Foreign Value Added as a Share of Gross Exports",
+          alias: "VATI_FVASGE",
+          name: "1-6"
+        },
+        {
+          // Foreign value added as a share of gross exports
+          //Trade balance, value added (BALVA, $)
+          label: "Bilateral Trade Balance, Value Added",
+          alias: "VATI_BTBVA",
           name: "1-6"
         },
       ],
@@ -127,49 +160,49 @@ export default {
         {
           //GDP production of final product exports
           label: "GDP Production of Final Product Exports",
-          alias: "GPFPE",
+          alias: "GDPPI_GPFPE",
           name: "2-0"
         },
         {
           //GDP production of final product exports, as a share of GDP
           label: "GDP Production of Final Product Exports, As a Share of GDP",
-          alias: "GPFPEASG",
+          alias: "GDPPI_GPFPEASG",
           name: "2-1"
         },
         {
           //GDP production of intermediate product exports
           label: "GDP Production of Intermediate Product Exports",
-          alias: "FVAEBC",
+          alias: "GDPPI_FVAEBC",
           name: "2-2"
         },
         {
           //GDP production of intermediate product exports, as a share of GDP
           label: "GDP Production of Intermediate Product Exports, as a Share Of GDP",
-          alias: "DCDVAE",
+          alias: "GDPPI_DCDVAE",
           name: "2-3"
         },
         {
           //GDP production of intermediate product exports, for importer’s direct absorption
           label: "GDP Production of Intermediate Product Exports, for Importer’s Direct Absorption",
-          alias: "GPIPEFIDA",
+          alias: "GDPPI_GPIPEFIDA",
           name: "2-4"
         },
         {
           //GDP production of intermediate product exports, for importer’s direct absorption, as a share of GDP
           label: "GDP Production of Intermediate Product Exports, for Importer’s Direct Absorption, As a Share of GDP",
-          alias: "GPIPEFIDAASG",
+          alias: "GDPPI_GPIPEFIDAASG",
           name: "2-5"
         },
         {
           //GDP production of intermediate product exports, for further cross-border processing
           label: "GDP production of intermediate product exports, for further cross-border processing",
-          alias: "DCFVAE",
+          alias: "GDPPI_DCFVAE",
           name: "2-6"
         },
         {
           //GDP production of intermediate product exports, for further cross-border process, as a share of GDP
           label: "GDP Production of Intermediate Product Exports, for Further Cross-border Process, As a Share of GDP",
-          alias: "GPIPEFFCPASG",
+          alias: "GDPPI_GPIPEFFCPASG",
           name: "2-7"
         }
       ],

@@ -7,7 +7,10 @@ export default new Vuex.Store({
   state: {
     fid:'',
     pid:'',
-    page:''
+    page:'',
+    industry:[],
+    country:[],
+
   },
   mutations: {
     CHANGEPID(state,pid){
@@ -18,6 +21,12 @@ export default new Vuex.Store({
     },
     CHANGEPAGE(state,page){
       state.page = page
+    },
+    SETINDUSTRY(state,industry){
+      state.industry = industry
+    },
+    SETCOUNTRY(state,country){
+      state.country = country
     }
   },
   actions: {
@@ -29,6 +38,12 @@ export default new Vuex.Store({
     },
     changepage({commit},page){
       commit('CHANGEPAGE',page)
+    },
+    setindustry({commit},industry){
+      commit('SETINDUSTRY',industry)
+    },
+    setcountry({commit},country){
+      commit('SETCOUNTRY',country)
     },
   }
 })

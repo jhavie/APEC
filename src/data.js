@@ -1,5 +1,14 @@
 const Mock = require('mockjs');
 
+export let  yearOptions =[{
+            label: '2005',
+            value: '2005'
+        }, {
+            label: '2012',
+            value: '2012'
+        }
+];
+
 export let echart3DOption = {
     title: {
         text: 'Economy(Unit: million $)',
@@ -9,15 +18,22 @@ export let echart3DOption = {
             fontSize: 15,
         }
     },
+    toolbox: {
+        feature: {
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
     legend: {
         type: 'scroll',
         orient: 'vertical',
         right: 10,
         top: 20,
         bottom: 20,
-        data: {
-            legendData: ['I1', 'I2', 'I3', 'I4']
-        }
 
         // selected: data.selected
     },
@@ -37,22 +53,30 @@ export let echart3DOption = {
         // dimensions: [
         //     'Exporting Country','Importing Country','Value
         // ],
-        source: []
+        source: [
+            ["Trading Partner","Year","Value"],
+            ["AUS",2005,2341.6],
+            ["BRN",2005,3.22],
+            ["CAN",2005,10048.11],
+            ["CHL",2005,12347.75],
+            ["AUS",2012,2341.6],
+            ["BRN",2012,3.22],
+            ["CAN",2012,10048.11],
+            ["CHL",2012,12347.75]
+        ]
     },
     yAxis3D: {
         type: 'category',
-        name: 'Importing Countries',
+        name: 'Trading Partner',
         //Importing Countries Y
-        data: ['BRN', 'ROW'],
         nameTextStyle: {
             fontSize: 14
         }
     },
     xAxis3D: {
         type: 'category',
-        name: 'Exporting Countries',
+        name: 'Year',
         //Exporting Countries
-        data: ['AUS'],
         nameTextStyle: {
             fontSize: 14
         }
@@ -180,6 +204,16 @@ export let echartPieOption = {
             // ["Private households with employed persons & extra-territorial organizations & bodies","0.1"]
         ]
     },
+    toolbox: {
+        feature: {
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
     // visualMap: {
     //     show: true,
     //     min: 0,
@@ -190,22 +224,39 @@ export let echartPieOption = {
     // },
     series: [
         {
-        type: 'pie',
-        radius: [10,150],
-        center: ['50%', '50%'],
-        roseType : 'radius',
-        encode: {
-            itemName: 'Economies',
-            value: 'Value'
-        },
-        itemStyle: {
-            normal: {
-                shadowBlur: 200,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-        },
+            type: 'pie',
+            radius: [50,150],
+            center: ['25%', '50%'],
+            roseType : 'radius',
+            encode: {
+                itemName: 'Trading Partner',
+                value: '2005'
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
         // No encode specified, by default, it is '2012'.
-    }, 
+        }, 
+        {
+            type: 'pie',
+            radius: [50,150],
+            center: ['75%', '50%'],
+            roseType : 'radius',
+            encode: {
+                itemName: 'Trading Partner',
+                value: '2012'
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+        // No encode specified, by default, it is '2012'.
+        }, 
     // {
     //     type: 'pie',
     //     radius: [25,60],
@@ -263,6 +314,7 @@ export function generatePieData (){
         ))
     })
     this.echartPieOption.dataset.source = pieData;
+    console.log(pieData)
     return this.echartPieOption;
 };
 
@@ -277,10 +329,10 @@ export let echartBarOption = {
     },
     toolbox: {
         feature: {
-            magicType: {
-                show: true,
-                type: ['line', 'bar']
-            },
+            // magicType: {
+            //     show: true,
+            //     type: ['line', 'bar']
+            // },
             restore: {
                 show: true
             },
@@ -313,29 +365,16 @@ export let echartBarOption = {
     //     }
     // },
     dataset: {
-        dimensions: ['EXP,IMP', '2005','2012'],
+        dimensions: ['Trading Partner', '2005','2012'],
         source: [
             // ['EXP,IMP', '2005','2012'],
-            ["BRN,AUS", 38.42, 1112.12],
-            ["CAN,AUS", 7700.92, 1412.12],
-            ["CHN,AUS", 2098.58, 112.12],
-            ["EU28,AUS", 25129.1, 912.12],
-            ["AUS,BRN", 40.39, 1122.12],
-            ["CAN,BRN", 46.47, 1112.12],
-            ["CHN,BRN", 188.66, 1192.12],
-            ["EU28,BRN", 133.82, 9112.12],
-            ["AUS,CAN", 565.43, 11112.12],
-            ["BRN,CAN", 0.85, 11211.12],
-            ["CHN,CAN", 31702.83, 13312.12],
-            ["EU28,CAN", 28180.54, 1312.12],
-            ["AUS,CHL", 120.7, 1124.12],
-            ["BRN,CHL", 0.2, 11255.12],
-            ["CAN,CHL", 257.35, 11432.12],
-            ["EU28,CHL", 7132.5, 1132.12],
-            ["AUS,EU28", 3021.7, 113112.12],
-            ["BRN,EU28", 1.3, 111112.112],
-            ["CAN,EU28", 18582.5, 11112.12],
-            ["CHN,EU28", 132322.72, 1112.12],
+            // ['Trading Partner', '2005','2012'],
+            ["AUS",12.2,412.1],
+            ["ROW",1221.2,312.1],
+            ["BRN", 38.42, 1112.12],
+            ["CAN", 7700.92, 1412.12],
+            ["CHN", 2098.58, 112.12],
+            ["EU28", 25129.1, 912.12],
         ]
     },
     xAxis: {
@@ -380,10 +419,123 @@ export function generateBarData(){
     this.echartBarOption.dataset.source = barData;
     return this.echartBarOption;
 }
+
+export let echartLineOption = {
+    title: {
+        text: 'Gross Trade Indicators',
+        subtext: 'Gross Export'
+    },
+    legend: {},
+    tooltip: {
+        trigger: 'axis',
+    },
+    toolbox: {
+        feature: {
+            // magicType: {
+            //     show: true,
+            //     type: ['line', 'bar']
+            // },
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    dataZoom: [{
+        xAxisIndex: [0]
+    }, {
+        yAxisIndex: [0]
+    }],
+    grid: {
+        left: '10%',
+        right: '10%',
+        bottom: '10%',
+        top: '10%',
+        containLabel: true
+    },
+    // visualMap: {
+    //     show:false,
+    //     type: 'piecewise',
+    //     max: 132323,
+    //     min: 0,
+    //     dimension: 2,
+    //     // seriesIndex:0,
+    //     inRange: {
+    //         color: ['#455a64', '#616161', '#5d4037', '#ff6e40', '#ffab40', '#ffd740', '#ffff00', '#eeff41', '#b2ff59', '#69f0ae', '#64ffda', '#18ffff', '#40c4ff', '#448aff', '#536dfe', '#7c4dff', '#e040fb', '#ff4081', '#ff5252']
+    //     }
+    // },
+    dataset: {
+        // dimensions: ['Trading Partner', '2005','2012'],
+        source: [
+            ["AUS",12.2,412.1],
+            ["ROW",1221.2,312.1],
+            ["BRN", 38.42, 1112.12],
+            ["CAN", 7700.92, 1412.12],
+            ["CHN", 2098.58, 112.12],
+            ["EU28", 25129.1, 912.12],
+        ]
+    },
+    xAxis: {
+        type: 'category',
+    },
+    yAxis: {},
+    series: [
+        {
+            type: 'line',
+            barCateGoryGap:80,
+            itemStyle: {
+                normal: {
+                    // color: '#c23531',
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+        },
+        {
+            type: 'line',
+            itemStyle: {
+                normal: {
+                    // color: '#c34531',
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+
+        },
+    ]
+};
+
+export function generateLineData(){
+    let lineData = [];
+    let economiesArr = ["BRN,AUS", "CAN,AUS", "CHN,AUS", "EU28,AUS", "AUS,BRN", "CAN,BRN", "CHN,BRN", "EU28,BRN", "AUS,CAN", "BRN,CAN", "CHN,CAN", "EU28,CAN", "AUS,CHL", "BRN,CHL", "CAN,CHL", "EU28,CHL", "AUS,EU28", "BRN,EU28", "CAN,EU28", "CHN,EU28"];
+    economiesArr.map((item)=>{
+        lineData.push(
+            Mock.mock(
+                [item,'@float(0,20000,2,2)','@float(0,20000,2,2)']
+            )
+        )
+    })
+    this.echartLineOption.dataset.source = lineData;
+    return this.echartLineOption;
+}
+
+
 export let echartTreeOption = {
     tooltip: {
         trigger: 'item',
         triggerOn: 'mousemove'
+    },
+    toolbox: {
+        feature: {
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
     },
     series:[
         {
@@ -426,6 +578,16 @@ export let echartTreeOption = {
 }
 
 export let echartTreeMapOption = {
+    toolbox: {
+        feature: {
+            restore: {
+                show: true
+            },
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
     series: [{
         type: 'treemap',
         data: [
