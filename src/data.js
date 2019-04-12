@@ -11,8 +11,8 @@ export let  yearOptions =[{
 
 export let echart3DOption = {
     title: {
-        text: 'Economy(Unit: million $)',
-        subtext: 'Parterner',
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
         subtextStyle: {
             color: '#000',
             fontSize: 15,
@@ -156,12 +156,20 @@ export function generate3DData(){
     
 };
 export let echartPieOption = {
+    title: {
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
+        subtextStyle: {
+            color: '#000',
+            fontSize: 15,
+        }
+    },
     legend: {
         type:'scroll',
         left: 20,
         orient: 'vertical',
         right: 10,
-        top: 20,
+        top: 80,
         bottom: 20,
     },
     tooltip: {},
@@ -226,7 +234,7 @@ export let echartPieOption = {
         {
             type: 'pie',
             radius: [50,150],
-            center: ['25%', '50%'],
+            center: ['30%', '50%'],
             roseType : 'radius',
             encode: {
                 itemName: 'Trading Partner',
@@ -320,8 +328,12 @@ export function generatePieData (){
 
 export let echartBarOption = {
     title: {
-        text: 'Gross Trade Indicators',
-        subtext: 'Gross Export'
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
+        subtextStyle: {
+            color: '#000',
+            fontSize: 15,
+        }
     },
     legend: {},
     tooltip: {
@@ -350,7 +362,7 @@ export let echartBarOption = {
         left: '10%',
         right: '10%',
         bottom: '10%',
-        top: '10%',
+        top: '20%',
         containLabel: true
     },
     // visualMap: {
@@ -422,8 +434,12 @@ export function generateBarData(){
 
 export let echartLineOption = {
     title: {
-        text: 'Gross Trade Indicators',
-        subtext: 'Gross Export'
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
+        subtextStyle: {
+            color: '#000',
+            fontSize: 15,
+        }
     },
     legend: {},
     tooltip: {
@@ -452,7 +468,7 @@ export let echartLineOption = {
         left: '10%',
         right: '10%',
         bottom: '10%',
-        top: '10%',
+        top: '20%',
         containLabel: true
     },
     // visualMap: {
@@ -523,6 +539,14 @@ export function generateLineData(){
 
 
 export let echartTreeOption = {
+    title: {
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
+        subtextStyle: {
+            color: '#000',
+            fontSize: 15,
+        }
+    },
     tooltip: {
         trigger: 'item',
         triggerOn: 'mousemove'
@@ -578,6 +602,14 @@ export let echartTreeOption = {
 }
 
 export let echartTreeMapOption = {
+    title: {
+        text: 'Gross trade indicators(Unit: million $)',
+        subtext: 'Gross exports ($): by APEC economy, trading partner, industry, year',
+        subtextStyle: {
+            color: '#000',
+            fontSize: 15,
+        }
+    },
     toolbox: {
         feature: {
             restore: {

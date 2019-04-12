@@ -25,14 +25,15 @@
             placeholder="Select"
             :transfer="true"
             style="width:200px"
+            @on-change="changeOption"
             filterable
             clearable
             multiple
           >
             <Option
-              v-for="item in countryOptions"
+              v-for="item in countryOptions2"
               :value="item.value"
-              :disabled="optionDisabled"
+              :disabled="optionDisabled2"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
@@ -240,7 +241,7 @@
 
 <script>
 import ajax from "@/util.js";
-import { yearOptions, echart3DOption, echartLineOption,echartBarOption,echartPieOption} from "@/data.js";
+import { yearOptions, echart3DOption, echartLineOption,echartBarOption,echartPieOption } from "@/data.js";
 import { mapActions, mapState } from "vuex";
 export default {
   //Gross Export
@@ -261,6 +262,7 @@ export default {
       echartType: "",
       tabValue: "Table",
       optionDisabled: false,
+      optionDisabled2: false,
       btnDisabled: false,
       pieDisabled: false,
       barDisabled: false,
@@ -309,7 +311,24 @@ export default {
         },
         {
           title: "Year",
-          key: "year_type"
+          key: "year_type",
+          // filters:[
+          //   {
+          //     label:'2005',
+          //     value:2005
+          //   },{
+          //     label:'2012',
+          //     value:2012
+          //   }
+          // ],
+          //   filterMultiple: false,
+          //       filterMethod (value, row) {
+          //           if (value === 2005) {
+          //               return row.year_type === 2005;
+          //           } else if (value === 2012) {
+          //               return row.year_type === 2012;
+          //           }
+          //       }
         },
         {
           title: "APEC Economy",
@@ -326,6 +345,7 @@ export default {
         }
       ],
       countryOptions: [],
+      countryOptions2: [],
       industryOptions: [
         // { value: 'beijing', label: '北京', children: [ { value: 'gugong', label: '故宫' } ] },
         // { value: 'jiangsu', label: '江苏', children: [ { value: 'nanjing', label: '南京' } ] }
@@ -337,7 +357,9 @@ export default {
   mounted() {
     this.yearOptions = yearOptions;
     this.industryOptions = this.industry;
-    this.countryOptions = this.country;
+    this.countryOptions = [...this.country];
+    this.countryOptions.shift();
+    this.countryOptions2 = this.country;
   },
   computed: {
     ...mapState(["pid", "fid", "page", "industry", "country"])
@@ -384,6 +406,7 @@ export default {
               let rp_data = response.data.data;
               that.tableData = rp_data.data;
               that.total = rp_data.total;
+              that.get3Ddata();
             })
             .catch(function(error) {
               console.log(error);
@@ -393,7 +416,9 @@ export default {
           // this.$Message.error('Fail!');
         }
       });
-      
+    },
+    handleReset(){
+      this.$refs['formData'].resetFields();
     },
     get3Ddata() {
       let data = this.formData;
@@ -432,7 +457,6 @@ export default {
     get2Ddata(type) {
       let data = this.formData;
       let that = this;
-      `echart${type}Option`.dataset.source = rp_data.data
       ajax({
         method: "POST",
         url: global.DEV_HOST + "/getLineData",
@@ -442,12 +466,12 @@ export default {
           // console.log(response);
           let rp_data = response.data
           // 'echart'+type+'Option'.dataset.source = rp_data.data
-          console.log(`echart${type}Option`.dataset.source);
-          // `echart${type}Option`.dataset.source
-          // echartLineOption.dataset.source = rp_data.data
-          // echartBarOption.dataset.source = rp_data.data
-          // echartPieOption.dataset.source = rp_data.data
-          // that.init2DChart(type);
+          // console.log(`echart${type}Option`.dataset.source);
+          // `echart${type}Option`.dataset.source = rp_data.data
+          echartLineOption.dataset.source = rp_data.data
+          echartBarOption.dataset.source = rp_data.data
+          echartPieOption.dataset.source = rp_data.data
+          that.init2DChart(type);
         })
         .catch(function(error) {
           console.log(error);
@@ -470,14 +494,37 @@ export default {
       }
     },
     exportData() {
-      util.exportData(this.$refs.tableData, "test");
+      let data = this.formData
+      ajax({
+          method: 'GET',
+          url: global.DEV_HOST + '/export',
+          params: data,
+          responseType: 'blob'
+      }).then(function (response) {
+          let url = window.URL.createObjectURL(response.data);
+          // window.location.href = url;
+          var link = document.createElement('a');
+          // link.download = that.text + ' ' + that.subtext;
+          link.href = url;
+          link.click();
+          window.URL.revokeObjectURL(link.href)
+      }).catch(function (error) {
+          console.log(error);
+      });
     },
+    // this.$refs.tableData.exportCsv({
+    //     filename: 'Gross trade indicators(Unit: million $)'+'Gross exports ($): by APEC economy, trading partner, industry, year'
+    //   });
+    // },
     changeRadio(val) {
       if (val === "3D") {
         this.get3Ddata();
       } else {
         this.get2Ddata(val);
       }
+    },
+    changeOption(val){
+      this.optionDisabled2 = val[0] ==='All' 
     }
   }
 };
