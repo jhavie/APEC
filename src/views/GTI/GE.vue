@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div v-if="this.industryOptions.length>0 && this.countryOptions.length>0 && this.countryOptions2.length>0" style="background:#eee;padding: 20px;">
+    <div style="background:#eee;padding: 20px;">
+       <!-- v-if="this.industryOptions.length>0 && this.countryOptions.length>0 && this.countryOptions2.length>0"  -->
       <Form ref="formData" :model="formData" :rules="ruleInline" inline>
         <FormItem prop="e_country" label="APEC Economy">
           <Select
@@ -8,6 +9,7 @@
             placeholder="Select"
             :transfer="true"
             style="width:200px"
+            @on-change="changeOption"
             filterable
             clearable
           >
@@ -25,7 +27,7 @@
             placeholder="Select"
             :transfer="true"
             style="width:200px"
-            @on-change="changeOption"
+            @on-change="changeOption2"
             filterable
             clearable
             multiple
@@ -39,7 +41,12 @@
           </Select>
         </FormItem>
         <FormItem prop="industry" label="Industry">
-          <Select v-model="formData.industry" style="width:500px" placeholder="Select">
+          <Select 
+            v-model="formData.industry"
+            style="width:500px"
+            placeholder="Select"
+            clearable
+          >
             <!-- <Option
                 v-for="item in industryOptions"
                 :value="item.value"
@@ -117,7 +124,7 @@
           </Select>
         </FormItem>
         <FormItem class="searchBtn">
-          <Button @click="handleReset()">Reset</Button>
+          <Button @click="handleReset()" style="margin-right: 5px">Reset</Button>
           <Button type="info" @click="handleSubmit()">Search</Button>
         </FormItem>
       </Form>
@@ -128,18 +135,20 @@
           <TabPane label="Table" name="Table">
             <div class="exportBtn">
               <!-- <head>{{this.echartOption.title.text}}-{{this.echartOption.title.subtext}}</head> -->
-              <Button type="primary" @click="exportData" :disabled="btnDisabled">
-                <Icon type="ios-download-outline"></Icon>Export data
+              <Button
+                type="primary"
+                :loading="btnLoading"
+                @click="exportTableData"
+                :disabled="btnDisabled">
+                <Icon type="ios-download-outline"></Icon>Export Table Data
               </Button>
               <!-- <Button
                 type="primary"
-                size="mini"
                 :loading="btnLoading"
-                @click="exportAllData"
-                :disabled="btnDisabled"
-              >
-                <Icon type="ios-download-outline"></Icon>Export all source data
-              </Button>-->
+                @click="exportSourceData"
+                :disabled="btnDisabled">
+                <Icon type="ios-download-outline"></Icon>Export Source Data
+              </Button> -->
             </div>
             <Table
               border
@@ -173,7 +182,7 @@
             <div style="float:right;margin-right:15px">
               <RadioGroup v-model="echartType" type="button" size="large" @on-change="changeRadio">
                 <Radio label="3D" :disabled="bar3DDisabled"></Radio>
-                <Radio label="Line" :disabled="false"></Radio>
+                <Radio label="Line" :disabled="lineDisabled"></Radio>
                 <Radio label="Bar" :disabled="barDisabled"></Radio>
                 <Radio label="Pie" :disabled="pieDisabled"></Radio>
                 <!-- <Radio label="Tree" :disabled="treeDisable"></Radio> -->
@@ -264,10 +273,11 @@ export default {
       optionDisabled: false,
       optionDisabled2: false,
       btnDisabled: true,
-      pieDisabled: false,
-      barDisabled: false,
-      treeMapDisabled: false,
-      bar3DDisabled: false,
+      bar3DDisabled: true,
+      lineDisabled: true,
+      barDisabled: true,
+      pieDisabled: true,
+      // treeMapDisabled: false,
       tableLoading: false,
       btnLoading: false,
       chartLoading: false,
@@ -355,19 +365,18 @@ export default {
     };
   },
   mounted() {
-    this.getIndustry();
-    this.getCountry();
     this.yearOptions = yearOptions;
-    // this.industryOptions = this.industry;
-    // this.countryOptions = [...this.country];
-    // this.countryOptions.shift();
-    // this.countryOptions2 = this.country;
+    this.industryOptions = this.industry;
+    this.countryOptions = [...this.country];
+    this.countryOptions.shift();
+    this.countryOptions2 = this.country;
   },
   computed: {
     ...mapState(["pid", "fid", "page", "industry", "country"])
   },
   methods: {
     ...mapActions(["changepid", "changefid", "changepage"]),
+
     // optionsChange(val) {
     //   this.optionDisabled = val.length > 4;
     // },
@@ -399,6 +408,8 @@ export default {
       let that = this;
       this.$refs["formData"].validate(valid => {
         if (valid) {
+          that.tableLoading = true;
+          that.btnLoading = true;
           ajax({
             method: "POST",
             url: global.DEV_HOST+'/getTestTableData?',
@@ -409,6 +420,9 @@ export default {
               that.tableData = rp_data.data;
               that.total = rp_data.total;
               that.btnDisabled = false
+              that.btnLoading = false
+              that.tableLoading = false;
+              that.setChartBtnDisabled(false);
               that.get3Ddata();
             })
             .catch(function(error) {
@@ -420,62 +434,12 @@ export default {
         }
       });
     },
-    getIndustry() {
-      let that = this
-      ajax({
-          url: global.DEV_HOST + '/getIndustry',
-      })
-      .then(function (response) {
-          // let data = response.data.data
-          let newData = [
-            [ { 'en_type':'I1', 'industry':'Agriculture, hunting, forestry and fishing' } ], [ { 'en_type':'I2', 'industry':'Mining and quarrying' } ], [ { 'en_type':'I3', 'industry':'Food products, beverages and tobacco'}, { 'en_type':'I4', 'industry':'Iextiles and textile products,leather and footwear'}, { 'en_type':'I5', 'industry':'Wood and products of wood and cork'}, { 'en_type':'I6', 'industry':'Pulp, paper, paper products, printing and publishing'}, { 'en_type':'I7', 'industry':'Coke, refined petroleum products and nuclear fuel'}, { 'en_type':'I8', 'industry':'Chemicals'}, { 'en_type':'I9', 'industry':'Rubber and plastics products'}, { 'en_type':'I10', 'industry':'Other non-metallic mineral products'}, { 'en_type':'I11', 'industry':'Basic metals'}, { 'en_type':'I12', 'industry':'Fabricated metal products, except machinery and equipment'}, { 'en_type':'I13', 'industry':'Machinery and equipment, nec'}, { 'en_type':'I14', 'industry':'Computer, electronic and optical equipment'}, { 'en_type':'I15', 'industry':'Electrical machinery and apparatus, nec'}, { 'en_type':'I16', 'industry':'Motor vehicles, trailers and semi-trailers'}, { 'en_type':'I17', 'industry':'Other transport equipment'}, { 'en_type':'I18', 'industry':'Manufacturing nec  recycling (include Furniture)' } ], [ { 'en_type':'I19', 'industry':'Electricity, gas and water supply' }, { 'en_type':'I20', 'industry':'Construction' }, { 'en_type':'I21', 'industry':'Wholesale and retail tarde' }, { 'en_type':'I22', 'industry':'Hotels and restaurants' }, { 'en_type':'I23', 'industry':'Iransport and storage', }, { 'en_type':'I24', 'industry':'Post and Telecommunications' }, { 'en_type':'I25', 'industry':'Finance and insurance' }, { 'en_type':'I26', 'industry':'Real estate activities' }, { 'en_type':'I27', 'industry':'Renting of Machinery and equipment' }, { 'en_type':'I28', 'industry':'Computer and related activities' }, { 'en_type':'I29', 'industry':'R&D and other business activities' }, { 'en_type':'I30', 'industry':'Public administration and defence, compulsory social security' }, { 'en_type':'I31', 'industry':'Education' }, { 'en_type':'I32', 'industry':'Health and social work' }, { 'en_type':'I33', 'industry':'Other community, social and personal services' }, { 'en_type':'I34', 'industry':'Private households with employed persons & extra-territorial organizations & bodies' } ]
-          ]
-          // let echartIndustry = []
-          // newData = Object.assign([], data);
-          // data.forEach((item, index) => {
-          //   item.forEach(()=>{
-          //     console.log(item);
-          //       // newData[index].push({
-          //       //     value: item.en_type,
-          //       //     label: item.industry
-          //       // })
-          //     // echartIndustry.push(item.en_type)
-          //     })
-          // });
-          // console.log(data);
-          // that.setindustry(newData);
-          that.industryOptions = newData;
-      }).catch(function (error) {
-          console.log(error);
-      });
-    },
-    getCountry() {
-      let that = this
-      ajax({
-          url: global.DEV_HOST + '/getCountry',
-      })
-      .then(function (response) {
-          let data = response.data.data
-          let newData = []
-          // let echartIndustry = []
-          data.forEach((item, index) => {
-              newData.push({
-                  value: item.country,
-                  label: item.en_name
-              });
-          })
-          // that.setcountry(newData);
-          that.countryOptions = [...newData];
-          that.countryOptions.shift();
-          that.countryOptions2 = newData;
-      }).catch(function (error) {
-          console.log(error);
-      });
-    },
     handleReset(){
       this.$refs['formData'].resetFields();
     },
     get3Ddata() {
+      this.echartType = "3D";
+      this.chartLoading = true;
       let data = this.formData;
       let that = this;
       ajax({
@@ -503,6 +467,7 @@ export default {
               min: rp_data.min
             }
           };
+          that.chartLoading = false;
           that.init3DChart();
         })
         .catch(function(error) {
@@ -510,22 +475,24 @@ export default {
         });
     },
     get2Ddata(type) {
+      this.chartLoading = true;
       let data = this.formData;
       let that = this;
       ajax({
         method: "POST",
-        url: global.DEV_HOST + "/getLineData",
+        url: global.DEV_HOST + "/get2DData",
         params: data
       })
         .then(function(response) {
           // console.log(response);
           let rp_data = response.data
           // 'echart'+type+'Option'.dataset.source = rp_data.data
-          // console.log(`echart${type}Option`.dataset.source);
+          // console.log(`echart${type}Option`[dataset][source]);
           // `echart${type}Option`.dataset.source = rp_data.data
           echartLineOption.dataset.source = rp_data.data
           echartBarOption.dataset.source = rp_data.data
           echartPieOption.dataset.source = rp_data.data
+          that.chartLoading = false;
           that.init2DChart(type);
         })
         .catch(function(error) {
@@ -540,6 +507,7 @@ export default {
     init2DChart(type) {
       let myChart = this.$echarts.init(this.$refs["echart"]);
       // let newOptions = this.$obj.merge(echart2DOption, {});
+      // myChart.setOption(`echart${type}Option`, true);
       if(type==='Line'){
         myChart.setOption(echartLineOption, true);
       }else if(type ==='Bar'){
@@ -548,29 +516,35 @@ export default {
         myChart.setOption(echartPieOption, true);
       }
     },
-    exportData() {
-    //   let data = this.formData
-    //   ajax({
-    //       method: 'GET',
-    //       url: global.DEV_HOST + '/export',
-    //       params: data,
-    //       responseType: 'blob'
-    //   }).then(function (response) {
-    //       let url = window.URL.createObjectURL(response.data);
-    //       // window.location.href = url;
-    //       var link = document.createElement('a');
-    //       // link.download = that.text + ' ' + that.subtext;
-    //       link.href = url;
-    //       link.click();
-    //       window.URL.revokeObjectURL(link.href)
-    //   }).catch(function (error) {
-    //       console.log(error);
+    exportSourceData(){
+      console.log('exportSourceData');
+    },
+    exportTableData(){
+      console.log('exportTableData');
+    },
+    // exportData() {
+    // //   let data = this.formData
+    // //   ajax({
+    // //       method: 'GET',
+    // //       url: global.DEV_HOST + '/export',
+    // //       params: data,
+    // //       responseType: 'blob'
+    // //   }).then(function (response) {
+    // //       let url = window.URL.createObjectURL(response.data);
+    // //       // window.location.href = url;
+    // //       var link = document.createElement('a');
+    // //       // link.download = that.text + ' ' + that.subtext;
+    // //       link.href = url;
+    // //       link.click();
+    // //       window.URL.revokeObjectURL(link.href)
+    // //   }).catch(function (error) {
+    // //       console.log(error);
+    // //   });
+    // // },
+    // this.$refs.tableData.exportCsv({
+    //     filename: 'Gross trade indicators(Unit: million $)'+'Gross exports ($): by APEC economy, trading partner, industry, year'
     //   });
     // },
-    this.$refs.tableData.exportCsv({
-        filename: 'Gross trade indicators(Unit: million $)'+'Gross exports ($): by APEC economy, trading partner, industry, year'
-      });
-    },
     changeRadio(val) {
       if (val === "3D") {
         this.get3Ddata();
@@ -579,7 +553,37 @@ export default {
       }
     },
     changeOption(val){
-      this.optionDisabled2 = val[0] ==='All' 
+      console.log(val);
+      let that = this
+      this.countryOptions2.forEach(item=>{
+        for(let i in item){
+          if(item.value === val){
+            item.disabled = true;
+          }
+        }
+      })
+      console.log(this.countryOptions2);
+    },
+    changeOption2(val){
+      // this.optionDisabled2 = val[0] ==='All' 
+      console.log(this.formData.e_country);
+      console.log(this.countryOptions2);
+      // let that = this
+      // this.countryOptions2.forEach(item=>{
+      //   for(let i in item){
+      //     if(item[value] === that.formData.e_country){
+
+      //       // item.disabled = true;
+      //     }
+      //   }
+      // })
+      // this.optionDisabled2 = true
+    },
+    setChartBtnDisabled(bol){
+      this.bar3DDisabled = bol;
+      this.lineDisabled = bol;
+      this.barDisabled = bol;
+      this.pieDisabled = bol;
     }
   }
 };

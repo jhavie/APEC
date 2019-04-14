@@ -56,105 +56,64 @@ export default {
         {
           // Gross imports
           // Gross exports, intermediate (EXGR_INT, $)
-          label: "Gross exports, intermediate (EXGR_INT, $)",
-          alias: "GTI_GI",
+          label: "Gross Exports, Intermediate (EXGR_INT, $)",
+          alias: "GTI_GEI",
           name: "0-1"
         },
         {
           // Bilateral trade balance, gross
           // Gross exports, final (EXGR_FIN, $)
-          label: "Gross exports, final (EXGR_FIN, $)",
-          alias: "GTI_BTBG",
+          label: "Gross Exports, Final (EXGR_FIN, $)",
+          alias: "GTI_GEF",
           name: "0-2"
         },
         {
           // Gross imports (IMGR, $)
-          label: "Gross imports (IMGR, $)",
-          alias: "GTI_BTBG",
+          label: "Gross Imports (IMGR, $)",
+          alias: "GTI_GI",
           name: "0-3"
         },
         {
           // Gross imports, intermediate (IMGR_INT, $)
-          label: "Gross imports, intermediate (IMGR_INT, $)",
-          alias: "GTI_BTBG",
+          label: "Gross Imports, Intermediate (IMGR_INT, $)",
+          alias: "GTI_GII",
           name: "0-4"
         },
         {
           // Gross imports, final (IMGR_FIN, $)
-          label: "Gross imports, final (IMGR_FIN, $)",
-          alias: "GTI_BTBG",
+          label: "Gross Imports, Final (IMGR_FIN, $)",
+          alias: "GTI_GIF",
           name: "0-5"
         },
         {
           // Trade balance, gross (BALGR, $)
-          label: "Trade balance, gross (BALGR, $)",
-          alias: "GTI_BTBG",
-          name: "0-5"
+          label: "Trade Balance, Gross (BALGR, $)",
+          alias: "GTI_TBG",
+          name: "0-6"
         }
       ],
       VATI: [
-        // a.Value added exports ($): by APEC economy, trading partner, industry, year 
-        // b.Domestic content in intermediate exports that eventually return home ($): by APEC economy, industry, year
-        // c.Foreign value added content in gross exports ($): by APEC economy, industry, year
-        // d.Value added exports as a share of gross exports (%): by APEC economy, industry, year
-        // e.Domestic content in intermediate exports that eventually return home as a share of gross exports (%): by APEC economy, industry, year
-        // f.Foreign value added as a share of gross exports (%): by APEC economy, industry, year
-        // g.Bilateral trade balance, value added ($): by APEC economy, trading partner, year
-        // h.Indicator selection choices:
+          // Value added exports (EXVA, $)
+          // Value added imports (IMVA, $)
+          // Trade balance, value added (BALVA, $)
         {
           // Value added exports
-          label: "Value Added Exports",
+          label: "Value Added Exports (EXVA, $)",
           alias: "VATI_VAE",
           name: "1-0"
         },
         {
-          //Domestic content in intermediate exports that eventually return home
-          label: "Domestic Content in Intermediate exports that eventually return home",
-          alias: "VATI_DCRH",
+          // Value added imports (IMVA, $)
+          label: "Value Added Imports (IMVA, $)",
+          alias: "VATI_VAI",
           name: "1-1"
         },
         {
-          //Domestic content in intermediate exports that eventually return home
-          // Domestic content in gross exports (EXGR_DC, $)
-          label: "Domestic Content in Intermediate Exports that Eventually Return Home",
-          alias: "VATI_DCIEERH",
+          // Trade balance, value added (BALVA, $)
+          label: "Trade Balance, Value Added (BALVA, $)",
+          alias: "VATI_TBVA",
           name: "1-2"
-        },
-        {
-          //Foreign value added content in gross exports
-          // Domestic content as a share of gross exports (EXGR_DCSH, %)
-          label: "Foreign Value Added Content in Gross Exports",
-          alias: "VATI_FVACGE",
-          name: "1-3"
-        },
-        {
-          //Value added exports as a share of gross exports
-          //Domestic content returning home as a share of gross exports (EXGR_VS1SH, %)
-          label: "Value Added Exports as a Share of Gross Exports",
-          alias: "VATI_VAESGE",
-          name: "1-4"
-        },
-        {
-          //Domestic content in intermediate exports that eventually return home as a share of gross exports
-          //Foreign content as a share of gross exports (EXGR_VSSH, %)
-          label: "Domestic Content in Intermediate Exports that Eventually Return Home as a Share of Gross Exports",
-          alias: "VATI_DCIEERHSGE",
-          name: "1-5"
-        },
-        {
-          // Foreign value added as a share of gross exports
-          //Trade balance, value added (BALVA, $)
-          label: "Foreign Value Added as a Share of Gross Exports",
-          alias: "VATI_FVASGE",
-          name: "1-6"
-        },
-        {
-          // Foreign value added as a share of gross exports
-          //Trade balance, value added (BALVA, $)
-          label: "Bilateral Trade Balance, Value Added",
-          alias: "VATI_BTBVA",
-          name: "1-6"
-        },
+        }
       ],
       GDPPI: [
         {

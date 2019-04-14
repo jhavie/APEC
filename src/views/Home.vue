@@ -12,7 +12,7 @@
           </div>
           <Content>
             <!-- <router-link tag="li" to="/foo"/> -->
-            <component :is="component"></component>
+            <component v-if="this.industry.length>0 && this.country.length>0" :is="component"></component>
           </Content>
         </Layout>
       </Layout>
@@ -26,7 +26,6 @@ import Navigation from '@/framework/Navigation.vue'
 import LeftMenu from '@/framework/LeftMenu.vue'
 import ajax from "@/util.js";
 import { mapActions, mapState } from "vuex";
-import { Z_DATA_ERROR } from 'zlib';
 // import GE from '@/views/GTI/GE.vue'
 
 export default {
