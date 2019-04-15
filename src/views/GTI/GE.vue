@@ -1,6 +1,7 @@
 <template>
   <div>
     <div style="background:#eee;padding: 20px;">
+      <h1></h1>
        <!-- v-if="this.industryOptions.length>0 && this.countryOptions.length>0 && this.countryOptions2.length>0"  -->
       <Form ref="formData" :model="formData" :rules="ruleInline" inline>
         <FormItem prop="e_country" label="APEC Economy">
@@ -35,7 +36,7 @@
             <Option
               v-for="item in countryOptions2"
               :value="item.value"
-              :disabled="optionDisabled2"
+              :disabled="item.disabled"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
@@ -365,45 +366,31 @@ export default {
     };
   },
   mounted() {
+    // this.test();
+    
     this.yearOptions = yearOptions;
     this.industryOptions = this.industry;
     this.countryOptions = [...this.country];
     this.countryOptions.shift();
     this.countryOptions2 = this.country;
+    console.log(this.countryOptions2);
+  },
+  render: function (createElement) {
+        console.log(1);
+        return createElement('h1', '<div>111</div>')
   },
   computed: {
     ...mapState(["pid", "fid", "page", "industry", "country"])
   },
   methods: {
     ...mapActions(["changepid", "changefid", "changepage"]),
-
+      
     // optionsChange(val) {
     //   this.optionDisabled = val.length > 4;
     // },
     pageChanged() {
       this.handleSubmit();
     },
-    // changeSelect(val){
-    //   if(val.length>1){
-    //     this.pieDisabled = false;
-    //     this.barDisabled = true;
-    //     this.treeMapDisabled = true;
-    //     this.bar3DDisabled = false;
-    //   }else if(val.length === 0){
-    //     this.pieDisabled = true;
-    //     this.barDisabled = true;
-    //     this.treeMapDisabled = true;
-    //     this.bar3DDisabled = true;
-    //   }else{
-    //     this.pieDisabled = false;
-    //     this.barDisabled = false;
-    //     this.treeMapDisabled = false;
-    //     this.bar3DDisabled = false;
-    //   }
-    // },
-    // changeSelect2(val){
-    //   if(val.length>)
-    // },
     handleSubmit() {
       let that = this;
       this.$refs["formData"].validate(valid => {
@@ -516,11 +503,28 @@ export default {
         myChart.setOption(echartPieOption, true);
       }
     },
-    exportSourceData(){
-      console.log('exportSourceData');
-    },
+    // exportSourceData(){
+    //   console.log('exportSourceData');
+    // },
     exportTableData(){
-      console.log('exportTableData');
+      let data = this.formData
+      ajax({
+          method: 'GET',
+          url: global.DEV_HOST + '/testExport',
+          params: data,
+          responseType: 'blob'
+      }).then(function (response) {
+          let url = window.URL.createObjectURL(response.data);
+          // window.location.href = url;
+          var link = document.createElement('a');
+          // link.download = that.text + ' ' + that.subtext;
+          // console.log(repsonse);
+          link.href = url;
+          link.click();
+          window.URL.revokeObjectURL(link.href)
+      }).catch(function (error) {
+          console.log(error);
+      });
     },
     // exportData() {
     // //   let data = this.formData
@@ -553,30 +557,32 @@ export default {
       }
     },
     changeOption(val){
-      console.log(val);
-      let that = this
       this.countryOptions2.forEach(item=>{
         for(let i in item){
           if(item.value === val){
             item.disabled = true;
+          }else{
+            item.disabled = false;
           }
         }
       })
-      console.log(this.countryOptions2);
     },
     changeOption2(val){
       // this.optionDisabled2 = val[0] ==='All' 
-      console.log(this.formData.e_country);
-      console.log(this.countryOptions2);
-      // let that = this
       // this.countryOptions2.forEach(item=>{
-      //   for(let i in item){
-      //     if(item[value] === that.formData.e_country){
-
-      //       // item.disabled = true;
-      //     }
+      //   if(val.indexOf('All')>-1){
+      //     this.formData.e_country = 'All'
+      //     item.disabled = true
+      //   }else{
+      //     console.log(1);
+      //     // if(item.val !== this.formData.e_country){
+      //     //   item.disabled = false
+      //     // }else{
+            
+      //     // }
       //   }
       // })
+      // let that = this
       // this.optionDisabled2 = true
     },
     setChartBtnDisabled(bol){
