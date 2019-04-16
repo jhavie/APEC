@@ -157,7 +157,7 @@
                 <Radio label="3D" :disabled="bar3DDisabled"></Radio>
                 <Radio label="Line" :disabled="lineDisabled"></Radio>
                 <Radio label="Bar" :disabled="barDisabled"></Radio>
-                <Radio label="Pie" :disabled="pieDisabled"></Radio>
+                <Radio label="Pie" :disabled="true"></Radio>
                 <!-- <Radio label="Tree" :disabled="treeDisable"></Radio> -->
                 <!-- <Radio label="TreeMap" :disabled="treeMapDisabled"></Radio> -->
               </RadioGroup>

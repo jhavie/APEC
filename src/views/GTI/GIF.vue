@@ -41,7 +41,7 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <!-- <FormItem prop="industry" label="Industry">
+        <FormItem prop="industry" label="Industry">
           <Select 
             v-model="formData.industry"
             style="width:500px"
@@ -77,7 +77,7 @@
               >{{ item.industry }}</Option>
             </OptionGroup>
           </Select>
-        </FormItem> -->
+        </FormItem>
         <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
@@ -342,7 +342,7 @@ export default {
     this.formData.fid = this.fid;
     this.formData.pid = this.pid;
     this.yearOptions = yearOptions;
-    // this.industryOptions = this.industry;
+    this.industryOptions = this.industry;
     // this.countryOptions = [...this.country];
     this.countryOptions = JSON.parse(JSON.stringify(this.country));
     this.countryOptions.shift();
