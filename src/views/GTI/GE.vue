@@ -17,7 +17,7 @@
             <Option
               v-for="item in countryOptions"
               :value="item.value"
-              :disabled="optionDisabled"
+              :disabled="item.disabled"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
@@ -41,19 +41,13 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="industry" label="Industry">
+        <!-- <FormItem prop="industry" label="Industry">
           <Select 
             v-model="formData.industry"
             style="width:500px"
             placeholder="Select"
             clearable
           >
-            <!-- <Option
-                v-for="item in industryOptions"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option> -->
             <OptionGroup label="Agriculture, hunting, forestry and fishing">
               <Option
                 v-for="item in industryOptions[0]"
@@ -83,29 +77,7 @@
               >{{ item.industry }}</Option>
             </OptionGroup>
           </Select>
-          <!-- <Cascader 
-              :data="industryOptions" 
-              style="width:400px"
-              placeholder="Select" 
-              v-model="formData.industry">
-          </Cascader>-->
-          <!-- <Select
-              v-model="formData.industry"
-              placeholder="Select"
-              :transfer="true"
-              style="width:300px"
-              filterable
-              clearable
-              multiple
-            >
-              <Option
-                v-for="item in industryOptions"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option>
-          </Select>-->
-        </FormItem>
+        </FormItem> -->
         <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
@@ -267,6 +239,7 @@ export default {
         year: "",
         page: 1
       },
+      tmp:[],
       tableData: [],
       total: 0,
       echartType: "",
@@ -343,11 +316,11 @@ export default {
         },
         {
           title: "APEC Economy",
-          key: "e_country"
+          key: "exp"
         },
         {
           title: "Trading Partner",
-          key: "i_country"
+          key: "imp"
         },
         {
           title: "Value(Unit: million US. Dollar)",
@@ -366,18 +339,16 @@ export default {
     };
   },
   mounted() {
-    // this.test();
-    
+    // this.formData.fid = this.fid;
+    // this.formData.pid = this.pid;
     this.yearOptions = yearOptions;
-    this.industryOptions = this.industry;
-    this.countryOptions = [...this.country];
+    // this.industryOptions = this.industry;
+    // this.countryOptions = [...this.country];
+    this.countryOptions = JSON.parse(JSON.stringify(this.country));
     this.countryOptions.shift();
-    this.countryOptions2 = this.country;
-    console.log(this.countryOptions2);
-  },
-  render: function (createElement) {
-        console.log(1);
-        return createElement('h1', '<div>111</div>')
+    // this.countryOptions2 = [...this.country];
+    this.countryOptions2 = JSON.parse(JSON.stringify(this.country));
+
   },
   computed: {
     ...mapState(["pid", "fid", "page", "industry", "country"])
@@ -439,7 +410,7 @@ export default {
           rp_data.data.unshift(rp_data.correspond_arr);
           that.mergeOption = {
             xAxis3D: {
-              // data: rp_data.xAxis,
+              data: rp_data.xAxis,
               name: rp_data.correspond_arr[0]
             },
             yAxis3D: {
@@ -476,6 +447,7 @@ export default {
           // 'echart'+type+'Option'.dataset.source = rp_data.data
           // console.log(`echart${type}Option`[dataset][source]);
           // `echart${type}Option`.dataset.source = rp_data.data
+          // echartLineOption.series
           echartLineOption.dataset.source = rp_data.data
           echartBarOption.dataset.source = rp_data.data
           echartPieOption.dataset.source = rp_data.data
@@ -557,33 +529,39 @@ export default {
       }
     },
     changeOption(val){
+      this.tmp.unshift(val)
+      this.tmp.length = 2;
       this.countryOptions2.forEach(item=>{
-        for(let i in item){
-          if(item.value === val){
+          if(item.value === this.tmp[0]){
             item.disabled = true;
-          }else{
+          }else if(item.value === this.tmp[1]){
             item.disabled = false;
           }
-        }
       })
     },
     changeOption2(val){
-      // this.optionDisabled2 = val[0] ==='All' 
-      // this.countryOptions2.forEach(item=>{
-      //   if(val.indexOf('All')>-1){
-      //     this.formData.e_country = 'All'
-      //     item.disabled = true
-      //   }else{
-      //     console.log(1);
-      //     // if(item.val !== this.formData.e_country){
-      //     //   item.disabled = false
-      //     // }else{
-            
-      //     // }
-      //   }
-      // })
-      // let that = this
-      // this.optionDisabled2 = true
+      if(val[0] !== 'All'){
+          this.countryOptions.forEach(item=>{
+              if(val.indexOf(item.value) > -1){
+                this.countryOptions2[0].disabled = true;
+                item.disabled = true;
+              }else if(item.value !== this.formData.e_country){
+                if(val.length === 0){
+                  this.countryOptions2[0].disabled = false;
+                }
+                item.disabled = false;
+              }
+          })
+      }else{
+        this.countryOptions2.forEach(ele=>{
+          ele.disabled = true;
+        })
+      }
+      if(val.length === 0){
+        this.countryOptions2.forEach(ele=>{
+          ele.disabled = ele.value === this.formData.e_country
+        })
+      }
     },
     setChartBtnDisabled(bol){
       this.bar3DDisabled = bol;

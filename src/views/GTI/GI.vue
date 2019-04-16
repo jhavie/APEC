@@ -1,6 +1,7 @@
 <template>
   <div>
     <div style="background:#eee;padding: 20px;">
+      <h1></h1>
        <!-- v-if="this.industryOptions.length>0 && this.countryOptions.length>0 && this.countryOptions2.length>0"  -->
       <Form ref="formData" :model="formData" :rules="ruleInline" inline>
         <FormItem prop="e_country" label="APEC Economy">
@@ -9,13 +10,14 @@
             placeholder="Select"
             :transfer="true"
             style="width:200px"
+            @on-change="changeOption"
             filterable
             clearable
           >
             <Option
               v-for="item in countryOptions"
               :value="item.value"
-              :disabled="optionDisabled"
+              :disabled="item.disabled"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
@@ -26,7 +28,7 @@
             placeholder="Select"
             :transfer="true"
             style="width:200px"
-            @on-change="changeOption"
+            @on-change="changeOption2"
             filterable
             clearable
             multiple
@@ -34,24 +36,18 @@
             <Option
               v-for="item in countryOptions2"
               :value="item.value"
-              :disabled="optionDisabled2"
+              :disabled="item.disabled"
               :key="item.value"
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="industry" label="Industry">
+        <!-- <FormItem prop="industry" label="Industry">
           <Select 
             v-model="formData.industry"
             style="width:500px"
             placeholder="Select"
             clearable
           >
-            <!-- <Option
-                v-for="item in industryOptions"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option> -->
             <OptionGroup label="Agriculture, hunting, forestry and fishing">
               <Option
                 v-for="item in industryOptions[0]"
@@ -81,29 +77,7 @@
               >{{ item.industry }}</Option>
             </OptionGroup>
           </Select>
-          <!-- <Cascader 
-              :data="industryOptions" 
-              style="width:400px"
-              placeholder="Select" 
-              v-model="formData.industry">
-          </Cascader>-->
-          <!-- <Select
-              v-model="formData.industry"
-              placeholder="Select"
-              :transfer="true"
-              style="width:300px"
-              filterable
-              clearable
-              multiple
-            >
-              <Option
-                v-for="item in industryOptions"
-                :value="item.value"
-                :disabled="optionDisabled"
-                :key="item.value"
-              >{{ item.label }}</Option>
-          </Select>-->
-        </FormItem>
+        </FormItem> -->
         <FormItem prop="year" label="Year">
           <Select
             v-model="formData.year"
@@ -123,7 +97,7 @@
           </Select>
         </FormItem>
         <FormItem class="searchBtn">
-          <Button @click="handleReset()">Reset</Button>
+          <Button @click="handleReset()" style="margin-right: 5px">Reset</Button>
           <Button type="info" @click="handleSubmit()">Search</Button>
         </FormItem>
       </Form>
@@ -135,19 +109,19 @@
             <div class="exportBtn">
               <!-- <head>{{this.echartOption.title.text}}-{{this.echartOption.title.subtext}}</head> -->
               <Button
-                type="primary" 
-                @click="exportSourceData"
-                :disabled="btnDisabled">
-                <Icon type="ios-download-outline"></Icon>Export Source Data
-              </Button>
-              <Button
                 type="primary"
                 :loading="btnLoading"
                 @click="exportTableData"
-                :disabled="btnDisabled"
-              >
+                :disabled="btnDisabled">
                 <Icon type="ios-download-outline"></Icon>Export Table Data
               </Button>
+              <!-- <Button
+                type="primary"
+                :loading="btnLoading"
+                @click="exportSourceData"
+                :disabled="btnDisabled">
+                <Icon type="ios-download-outline"></Icon>Export Source Data
+              </Button> -->
             </div>
             <Table
               border
@@ -181,7 +155,7 @@
             <div style="float:right;margin-right:15px">
               <RadioGroup v-model="echartType" type="button" size="large" @on-change="changeRadio">
                 <Radio label="3D" :disabled="bar3DDisabled"></Radio>
-                <Radio label="Line" :disabled="false"></Radio>
+                <Radio label="Line" :disabled="lineDisabled"></Radio>
                 <Radio label="Bar" :disabled="barDisabled"></Radio>
                 <Radio label="Pie" :disabled="pieDisabled"></Radio>
                 <!-- <Radio label="Tree" :disabled="treeDisable"></Radio> -->
@@ -265,6 +239,7 @@ export default {
         year: "",
         page: 1
       },
+      tmp:[],
       tableData: [],
       total: 0,
       echartType: "",
@@ -272,10 +247,11 @@ export default {
       optionDisabled: false,
       optionDisabled2: false,
       btnDisabled: true,
-      pieDisabled: false,
-      barDisabled: false,
-      treeMapDisabled: false,
-      bar3DDisabled: false,
+      bar3DDisabled: true,
+      lineDisabled: true,
+      barDisabled: true,
+      pieDisabled: true,
+      // treeMapDisabled: false,
       tableLoading: false,
       btnLoading: false,
       chartLoading: false,
@@ -340,11 +316,11 @@ export default {
         },
         {
           title: "APEC Economy",
-          key: "e_country"
+          key: "exp"
         },
         {
           title: "Trading Partner",
-          key: "i_country"
+          key: "imp"
         },
         {
           title: "Value(Unit: million US. Dollar)",
@@ -363,48 +339,35 @@ export default {
     };
   },
   mounted() {
+    this.formData.fid = this.fid;
+    this.formData.pid = this.pid;
     this.yearOptions = yearOptions;
-    this.industryOptions = this.industry;
-    this.countryOptions = [...this.country];
+    // this.industryOptions = this.industry;
+    // this.countryOptions = [...this.country];
+    this.countryOptions = JSON.parse(JSON.stringify(this.country));
     this.countryOptions.shift();
-    this.countryOptions2 = this.country;
+    // this.countryOptions2 = [...this.country];
+    this.countryOptions2 = JSON.parse(JSON.stringify(this.country));
+
   },
   computed: {
     ...mapState(["pid", "fid", "page", "industry", "country"])
   },
   methods: {
     ...mapActions(["changepid", "changefid", "changepage"]),
+      
     // optionsChange(val) {
     //   this.optionDisabled = val.length > 4;
     // },
     pageChanged() {
       this.handleSubmit();
     },
-    // changeSelect(val){
-    //   if(val.length>1){
-    //     this.pieDisabled = false;
-    //     this.barDisabled = true;
-    //     this.treeMapDisabled = true;
-    //     this.bar3DDisabled = false;
-    //   }else if(val.length === 0){
-    //     this.pieDisabled = true;
-    //     this.barDisabled = true;
-    //     this.treeMapDisabled = true;
-    //     this.bar3DDisabled = true;
-    //   }else{
-    //     this.pieDisabled = false;
-    //     this.barDisabled = false;
-    //     this.treeMapDisabled = false;
-    //     this.bar3DDisabled = false;
-    //   }
-    // },
-    // changeSelect2(val){
-    //   if(val.length>)
-    // },
     handleSubmit() {
       let that = this;
       this.$refs["formData"].validate(valid => {
         if (valid) {
+          that.tableLoading = true;
+          that.btnLoading = true;
           ajax({
             method: "POST",
             url: global.DEV_HOST+'/getTestTableData?',
@@ -415,6 +378,9 @@ export default {
               that.tableData = rp_data.data;
               that.total = rp_data.total;
               that.btnDisabled = false
+              that.btnLoading = false
+              that.tableLoading = false;
+              that.setChartBtnDisabled(false);
               that.get3Ddata();
             })
             .catch(function(error) {
@@ -430,6 +396,8 @@ export default {
       this.$refs['formData'].resetFields();
     },
     get3Ddata() {
+      this.echartType = "3D";
+      this.chartLoading = true;
       let data = this.formData;
       let that = this;
       ajax({
@@ -442,7 +410,7 @@ export default {
           rp_data.data.unshift(rp_data.correspond_arr);
           that.mergeOption = {
             xAxis3D: {
-              // data: rp_data.xAxis,
+              data: rp_data.xAxis,
               name: rp_data.correspond_arr[0]
             },
             yAxis3D: {
@@ -457,6 +425,7 @@ export default {
               min: rp_data.min
             }
           };
+          that.chartLoading = false;
           that.init3DChart();
         })
         .catch(function(error) {
@@ -464,11 +433,12 @@ export default {
         });
     },
     get2Ddata(type) {
+      this.chartLoading = true;
       let data = this.formData;
       let that = this;
       ajax({
         method: "POST",
-        url: global.DEV_HOST + "/getLineData",
+        url: global.DEV_HOST + "/get2DData",
         params: data
       })
         .then(function(response) {
@@ -480,6 +450,7 @@ export default {
           echartLineOption.dataset.source = rp_data.data
           echartBarOption.dataset.source = rp_data.data
           echartPieOption.dataset.source = rp_data.data
+          that.chartLoading = false;
           that.init2DChart(type);
         })
         .catch(function(error) {
@@ -503,11 +474,28 @@ export default {
         myChart.setOption(echartPieOption, true);
       }
     },
-    exportSourceData(){
-      console.log('exportSourceData');
-    },
+    // exportSourceData(){
+    //   console.log('exportSourceData');
+    // },
     exportTableData(){
-      console.log('exportTableData');
+      let data = this.formData
+      ajax({
+          method: 'GET',
+          url: global.DEV_HOST + '/testExport',
+          params: data,
+          responseType: 'blob'
+      }).then(function (response) {
+          let url = window.URL.createObjectURL(response.data);
+          // window.location.href = url;
+          var link = document.createElement('a');
+          // link.download = that.text + ' ' + that.subtext;
+          // console.log(repsonse);
+          link.href = url;
+          link.click();
+          window.URL.revokeObjectURL(link.href)
+      }).catch(function (error) {
+          console.log(error);
+      });
     },
     // exportData() {
     // //   let data = this.formData
@@ -540,7 +528,45 @@ export default {
       }
     },
     changeOption(val){
-      this.optionDisabled2 = val[0] ==='All' 
+      this.tmp.unshift(val)
+      this.tmp.length = 2;
+      this.countryOptions2.forEach(item=>{
+          if(item.value === this.tmp[0]){
+            item.disabled = true;
+          }else if(item.value === this.tmp[1]){
+            item.disabled = false;
+          }
+      })
+    },
+    changeOption2(val){
+      if(val[0] !== 'All'){
+          this.countryOptions.forEach(item=>{
+              if(val.indexOf(item.value) > -1){
+                this.countryOptions2[0].disabled = true;
+                item.disabled = true;
+              }else if(item.value !== this.formData.e_country){
+                if(val.length === 0){
+                  this.countryOptions2[0].disabled = false;
+                }
+                item.disabled = false;
+              }
+          })
+      }else{
+        this.countryOptions2.forEach(ele=>{
+          ele.disabled = true;
+        })
+      }
+      if(val.length === 0){
+        this.countryOptions2.forEach(ele=>{
+          ele.disabled = ele.value === this.formData.e_country
+        })
+      }
+    },
+    setChartBtnDisabled(bol){
+      this.bar3DDisabled = bol;
+      this.lineDisabled = bol;
+      this.barDisabled = bol;
+      this.pieDisabled = bol;
     }
   }
 };

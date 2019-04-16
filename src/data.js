@@ -377,7 +377,7 @@ export let echartBarOption = {
     //     }
     // },
     dataset: {
-        dimensions: ['Trading Partner', '2005','2012'],
+        // dimensions: ['Trading Partner', '2005','2012'],
         source: [
             // ['EXP,IMP', '2005','2012'],
             // ['Trading Partner', '2005','2012'],
@@ -396,7 +396,6 @@ export let echartBarOption = {
     series: [
         {
             type: 'bar',
-            barCateGoryGap:80,
             itemStyle: {
                 normal: {
                     // color: '#c23531',
@@ -500,7 +499,6 @@ export let echartLineOption = {
     series: [
         {
             type: 'line',
-            barCateGoryGap:80,
             itemStyle: {
                 normal: {
                     // color: '#c23531',
