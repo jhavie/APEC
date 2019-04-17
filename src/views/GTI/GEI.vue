@@ -54,7 +54,7 @@
                 :value="item.enType"
                 :key="item.enType">
               {{ item.industry }}
-              <span style="float:right;color:#ccc">{{ item.enName }}</span>
+              <span style="float:right;color:#ccc">{{ item.enName }} ({{ item.industryCode }})</span>
               </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
@@ -63,7 +63,7 @@
                 :value="item.enType"
                 :key="item.enType">
               {{ item.industry }}
-              <span style="float:right;color:#ccc">{{ item.enName }}</span>
+              <span style="float:right;color:#ccc">{{ item.enName }} ({{ item.industryCode }})</span>
               </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
@@ -72,7 +72,7 @@
                 :value="item.enType"
                 :key="item.enType">
                 {{ item.industry }}
-                <span style="float:right;color:#ccc">{{ item.enName }}</span>
+                <span style="float:right;color:#ccc">{{ item.enName }} ({{ item.industryCode }})</span>
                 </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
@@ -81,7 +81,7 @@
                 :value="item.enType"
                 :key="item.enType">
                 {{ item.industry }}
-                <span style="float:right;color:#ccc">{{ item.enName }}</span>
+                <span style="float:right;color:#ccc">{{ item.enName }} ({{ item.industryCode }})</span>
                 </Option>
             </OptionGroup>
           </Select>
@@ -472,9 +472,27 @@ export default {
           // 'echart'+type+'Option'.dataset.source = rp_data.data
           // console.log(`echart${type}Option`[dataset][source]);
           // `echart${type}Option`.dataset.source = rp_data.data
+          let seriesArray = []
+          that.formData.year.forEach(item=>{
+            seriesArray.push(
+              {
+                  type: type.toLowerCase(),
+                  itemStyle: {
+                      normal: {
+                          // color: '#c23531',
+                          shadowBlur: 200,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  },
+              },
+            );
+          })
           echartLineOption.dataset.source = rp_data.data
+          echartLineOption.series = seriesArray
           echartBarOption.dataset.source = rp_data.data
+          echartBarOption.series = seriesArray
           echartPieOption.dataset.source = rp_data.data
+          // echartPieOption.series = seriesArray
           that.chartLoading = false;
           that.init2DChart(type);
         })
