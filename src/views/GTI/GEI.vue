@@ -51,30 +51,38 @@
             <OptionGroup label="Agriculture, hunting, forestry and fishing">
               <Option
                 v-for="item in industryOptions[0]"
-                :value="item.en_type"
-                :key="item.en_type"
-              >{{ item.industry }}</Option>
+                :value="item.enType"
+                :key="item.enType">
+              {{ item.industry }}
+              <span style="float:right;color:#ccc">{{ item.enName }}</span>
+              </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
               <Option
                 v-for="item in industryOptions[1]"
-                :value="item.en_type"
-                :key="item.en_type"
-              >{{ item.industry }}</Option>
+                :value="item.enType"
+                :key="item.enType">
+              {{ item.industry }}
+              <span style="float:right;color:#ccc">{{ item.enName }}</span>
+              </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
               <Option
                 v-for="item in industryOptions[2]"
-                :value="item.en_type"
-                :key="item.en_type"
-              >{{ item.industry }}</Option>
+                :value="item.enType"
+                :key="item.enType">
+                {{ item.industry }}
+                <span style="float:right;color:#ccc">{{ item.enName }}</span>
+                </Option>
             </OptionGroup>
             <OptionGroup label="Mining and quarrying">
               <Option
                 v-for="item in industryOptions[3]"
-                :value="item.en_type"
-                :key="item.en_type"
-              >{{ item.industry }}</Option>
+                :value="item.enType"
+                :key="item.enType">
+                {{ item.industry }}
+                <span style="float:right;color:#ccc">{{ item.enName }}</span>
+                </Option>
             </OptionGroup>
           </Select>
         </FormItem>
@@ -223,6 +231,7 @@
 
 <script>
 import ajax from "@/util.js";
+import { mapData } from "@/util.js";
 import { yearOptions, echart3DOption, echartLineOption,echartBarOption,echartPieOption } from "@/data.js";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -324,7 +333,7 @@ export default {
         },
         {
           title: "Industry",
-          key: "industry"
+          key: "industryCode"
         },
         {
           title: "Value(Unit: million US. Dollar)",
@@ -380,6 +389,18 @@ export default {
             .then(function(response) {
               let rp_data = response.data.data;
               that.tableData = rp_data.data;
+              mapData();
+              // console.log(that.tableData);
+              // that.tableData.map(item=>{
+              //   return {
+              //     id:item.id,
+              //     exp:item.exp,
+              //     imp:item.imp,
+              //     industry:item.industry,
+              //     value:item.value,
+              //     year_type:item.year_type
+              //   }
+              // })
               that.total = rp_data.total;
               that.btnDisabled = false
               that.btnLoading = false
