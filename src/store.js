@@ -10,7 +10,7 @@ export default new Vuex.Store({
     page:'',
     industry:[],
     country:[],
-
+    rawIndustry:[]
   },
   mutations: {
     CHANGEPID(state,pid){
@@ -27,6 +27,14 @@ export default new Vuex.Store({
     },
     SETCOUNTRY(state,country){
       state.country = country
+    },
+    SETRAWINDUSTRY(state,rawIndustry){
+      state.rawIndustry = rawIndustry
+    }
+  },
+  getters:{
+    getRawIndustry: state =>{
+      return state.rawIndustry;
     }
   },
   actions: {
@@ -44,6 +52,9 @@ export default new Vuex.Store({
     },
     setcountry({commit},country){
       commit('SETCOUNTRY',country)
+    },
+    setRawIndustry({commit},rawIndustry){
+      commit('SETRAWINDUSTRY',rawIndustry)
     },
   }
 })

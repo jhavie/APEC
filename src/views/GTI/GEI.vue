@@ -388,8 +388,8 @@ export default {
           })
             .then(function(response) {
               let rp_data = response.data.data;
-              that.tableData = rp_data.data;
-              mapData();
+              // that.tableData = rp_data.data;
+              that.tableData = mapData(rp_data.data);
               // console.log(that.tableData);
               // that.tableData.map(item=>{
               //   return {
@@ -439,7 +439,7 @@ export default {
               name: rp_data.correspond_arr[0]
             },
             yAxis3D: {
-              // data: rp_data.yAxis,
+            // data: rp_data.yAxis,
               name: rp_data.correspond_arr[1]
             },
             dataset: {

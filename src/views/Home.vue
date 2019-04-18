@@ -68,7 +68,7 @@ export default {
     // this.getMargorSector();
   },
   methods: {
-    ...mapActions(['setindustry','setcountry']),
+    ...mapActions(['setindustry','setcountry','setRawIndustry']),
     getIndustry() {
       let that = this
       ajax({
@@ -89,6 +89,7 @@ export default {
             newData[i].push(item);
           })
           console.log(newData);
+          that.setRawIndustry(data);
           that.setindustry(newData);
       }).catch(function (error) {
           console.log(error);

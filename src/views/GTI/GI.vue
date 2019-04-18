@@ -4,9 +4,9 @@
       <h1></h1>
        <!-- v-if="this.industryOptions.length>0 && this.countryOptions.length>0 && this.countryOptions2.length>0"  -->
       <Form ref="formData" :model="formData" :rules="ruleInline" inline>
-        <FormItem prop="e_country" label="APEC Economy">
+        <FormItem prop="i_country" label="APEC Economy">
           <Select
-            v-model="formData.e_country"
+            v-model="formData.i_country"
             placeholder="Select"
             :transfer="true"
             style="width:200px"
@@ -22,9 +22,9 @@
             >{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem prop="i_country" label="Trading Partner">
+        <FormItem prop="e_country" label="Trading Partner">
           <Select
-            v-model="formData.i_country"
+            v-model="formData.e_country"
             placeholder="Select"
             :transfer="true"
             style="width:200px"
@@ -256,14 +256,14 @@ export default {
       btnLoading: false,
       chartLoading: false,
       ruleInline: {
-        e_country: [
+        i_country: [
           {
             required: true,
             message: "Please fill in the APEC Economy",
             trigger: "blur"
           }
         ],
-        i_country: [
+        e_country: [
           {
             required: true,
             type: "array",
@@ -316,11 +316,11 @@ export default {
         },
         {
           title: "APEC Economy",
-          key: "exp"
+          key: "imp"
         },
         {
           title: "Trading Partner",
-          key: "imp"
+          key: "exp"
         },
         {
           title: "Value(Unit: million US. Dollar)",
@@ -339,8 +339,8 @@ export default {
     };
   },
   mounted() {
-    this.formData.fid = this.fid;
-    this.formData.pid = this.pid;
+    // this.formData.fid = this.fid;
+    // this.formData.pid = this.pid;
     this.yearOptions = yearOptions;
     // this.industryOptions = this.industry;
     // this.countryOptions = [...this.country];
@@ -442,14 +442,32 @@ export default {
         params: data
       })
         .then(function(response) {
-          // console.log(response);
+         // console.log(response);
           let rp_data = response.data
           // 'echart'+type+'Option'.dataset.source = rp_data.data
           // console.log(`echart${type}Option`[dataset][source]);
           // `echart${type}Option`.dataset.source = rp_data.data
+          let seriesArray = []
+          that.formData.year.forEach(item=>{
+            seriesArray.push(
+              {
+                  type: type.toLowerCase(),
+                  itemStyle: {
+                      normal: {
+                          // color: '#c23531',
+                          shadowBlur: 200,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  },
+              },
+            );
+          })
           echartLineOption.dataset.source = rp_data.data
+          echartLineOption.series = seriesArray
           echartBarOption.dataset.source = rp_data.data
+          echartBarOption.series = seriesArray
           echartPieOption.dataset.source = rp_data.data
+          // echartPieOption.series = seriesArray
           that.chartLoading = false;
           that.init2DChart(type);
         })
